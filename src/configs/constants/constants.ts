@@ -1,0 +1,24 @@
+export enum ConfigurationKey {
+  PORT = 'PORT',
+  APP_STAGE = 'APP_STAGE',
+  SENTRY_DNS_URL = 'SENTRY_DNS_URL',
+  DATABASE_URL = 'DATABASE_URL',
+  JWT_EXPIRY = 'JWT_EXPIRY',
+  JWT_SECRET = 'JWT_SECRET',
+  MAIL_ADDRESS = 'MAIL_ADDRESS',
+  MAIL_PASSWORD = 'MAIL_PASSWORD',
+}
+
+export enum APP_STAGE {
+  LOCAL = 'dev-local',
+  PRODUCTION = 'prod',
+  DEMO = 'demo',
+}
+
+export enum APP_MODULES {
+  GLOBAL = 'app',
+  AUTH = 'auth',
+  MAIL = 'mail',
+  ROLE = 'role',
+  USER = 'user',
+}
