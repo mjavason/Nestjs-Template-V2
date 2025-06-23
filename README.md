@@ -1,54 +1,48 @@
 # Nestjs-Template-V2
 
-An all new and improved Nestjs template. Supports JWT auth, Swagger docs, Zod validation, Mongoose ORM, env handling, emails and more
+An all new and improved NestJS template. Supports JWT auth, Swagger docs, Zod validation, Mongoose ORM, env handling, emails, structured logging, S3/Minio file uploads, and more.
 
 ## Features
 
 - **JWT-based Authentication**: Secure, stateful authentication using JSON web tokens.
-- **OAuth Integration (Google)**: The template supports OAuth 2.0 for easy integration with Google for social login.
-- **Swagger Documentation**: Automatically generated API documentation with Swagger.
-- **Validation**: Input validation using `class-validator` and `class-transformer`.
-- **Logging**: Structured logging with custom log levels.
-- **Mongoose ORM**: Integration with MongoDB using Mongoose for database interactions.
-- **Environment Variables**: Easy configuration using `.env` files.
-- **File Handling**: Support for file uploads and management.
-- **Email Support**: Integrated email service for notifications or transactional emails.
-- **Caching**: Easily configurable caching mechanisms.
-- **Telegram Bot Error Monitoring**: Integrates with the Telegram Monitor Bot for error reporting.
+- **OAuth Integration (Google)**: OAuth 2.0 support for Google social login.
+- **Swagger Documentation**: Automatically generated API documentation.
+- **Validation**: Input validation using `zod`.
+- **Logging**: Structured logging using `pino`, integrated with Sentry for error tracking.
+- **Mongoose ORM**: MongoDB integration via Mongoose.
+- **Environment Variables**: `.env`-based configuration.
+- **File Handling**: File uploads with support for S3 and Minio storage.
+- **Email Support**: Email service for notifications or transactional messages.
+- **Caching**: Built-in support for caching strategies.
+- **Telegram Bot Error Monitoring**: Integration with Telegram Monitor Bot for error notifications.
 
 ## Prerequisites
-
-Before running this app, make sure you have the following installed:
 
 - Node.js
 - npm
 
 ## Installation
 
-To get started, clone the repository and install the dependencies:
-
 ```bash
-$ git clone https://github.com/mjavason/nest.js-template-app.git
-$ cd nest.js-template-app
-$ npm install
-```
+git clone https://github.com/mjavason/nest.js-template-app.git
+cd nest.js-template-app
+npm install
+````
 
 ## Running the app
 
-You can run the application in different modes depending on your environment:
-
 ```bash
-# Development mode (auto-reloads on changes)
-$ npm run start:dev
+# Development mode
+npm run start:dev
 
 # Production mode
-$ npm run start:prod
+npm run start:prod
 
-# Debugging mode
-$ npm run start:debug
+# Debug mode
+npm run start:debug
 ```
 
-Ensure that your `.env` file is set up correctly before running the app.
+Ensure your `.env` file is configured properly.
 
 ## Environment Variables
 
@@ -56,43 +50,37 @@ The app uses environment variables to configure various settings. Check the `.en
 
 ## Test
 
-To run tests for the application:
-
 ```bash
 # Unit tests
-$ npm run test
+npm run test
 
-# End-to-End (e2e) tests
-$ npm run test:e2e
+# End-to-End tests
+npm run test:e2e
 
-# Test coverage report
-$ npm run test:cov
+# Coverage
+npm run test:cov
 ```
-
-Testing is an important part of the development process, and this template supports unit and e2e testing using Jest.
 
 ## Project Structure
 
-Here's an overview of the project structure:
-
 ```
-|── src/
-│   ├── app.module.ts          # Main application module
-│   ├── app.controller.ts      # Main app controller
-│   ├── log.controller.ts      # Logging controller
-│   ├── auth/                  # Authentication module
-│   ├── bucket/                # File storage and bucket management
-│   ├── common/                # Shared utilities, guards, configs, and interceptors
-│   ├── mail/                  # Email service integration
-│   ├── user/                  # User-related logic
-│   ├── ...                    # Additional modules and services
-│
-├── test/                      # Test files for the application
-├── .env.example               # Example environment configuration
-├── package.json               # Project dependencies and scripts
-└── README.md                  # Project documentation
+src/
+├── app/                      # Core modules and middleware
+├── common/                   # Shared decorators, guards, interceptors, schemas
+├── configs/                  # Logger, mail, swagger, sentry, firebase configs
+├── modules/
+│   ├── auth/                 # Authentication logic
+│   ├── mail/                 # Email sending and templating
+│   ├── user/                 # User and role management
+│   ├── db/                   # Database connection
+│   ├── seed/                 # Seeding logic
+│   └── organizations/        # Organization-related schemas
+├── utils/                    # Utility functions
+├── main.ts                   # Entry point
+test/                         # E2E and unit tests
+.env.example                  # Sample env config
 ```
 
 ## Contributing
 
-Contributions are welcome! If you'd like to improve this template, feel free to open a pull request or submit issues.
+Open a pull request or submit an issue to suggest improvements or report problems.
