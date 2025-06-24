@@ -1,4 +1,4 @@
-import { User, UserDocumentType } from '@common/models/user.schema';
+import { User, UserDocumentType } from '@common/models/user/user.schema';
 import configuration from '@configs/configuration';
 import {
   Injectable,

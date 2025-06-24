@@ -1,6 +1,6 @@
 import { USER_PERMISSIONS } from '@/modules/user/user.permission';
-import { Role } from '@common/models/role.schema';
-import { User } from '@common/models/user.schema';
+import { Role } from '@common/models/user/role.schema';
+import { User } from '@common/models/user/user.schema';
 import { NestFactory } from '@nestjs/core';
 import { getModelToken } from '@nestjs/mongoose';
 import { SeedModule } from './seed.module';

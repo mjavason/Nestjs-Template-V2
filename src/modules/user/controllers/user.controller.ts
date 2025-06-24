@@ -1,6 +1,6 @@
 import { AUTH_PERMISSIONS } from '@/modules/auth/auth.permission';
 import { Auth, UserContextParam } from '@common/decorators/auth.decorator';
-import { UserDocumentType } from '@common/models/user.schema';
+import { UserDocumentType } from '@common/models/user/user.schema';
 import { stripToSchema } from '@common/utils/strip-to-schema.util';
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';

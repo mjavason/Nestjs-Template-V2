@@ -1,4 +1,4 @@
-import { UserDocumentType } from '@common/models/user.schema';
+import { UserDocumentType } from '@common/models/user/user.schema';
 import {
   CanActivate,
   ExecutionContext,

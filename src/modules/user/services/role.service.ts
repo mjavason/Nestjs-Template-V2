@@ -3,7 +3,7 @@ import { MAIL_PERMISSIONS } from '@/modules/mail/mail.permission';
 import { ROLE_PERMISSIONS } from '@/modules/user/role.permission';
 import { USER_PERMISSIONS } from '@/modules/user/user.permission';
 import { APP_PERMISSIONS } from '@common/app.permission';
-import { Role, RoleDocumentType } from '@common/models/role.schema';
+import { Role, RoleDocumentType } from '@common/models/user/role.schema';
 import { APP_MODULES } from '@configs/constants/constants';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';

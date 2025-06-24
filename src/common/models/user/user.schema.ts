@@ -54,6 +54,24 @@ export class User implements UserType {
 
   @Prop({ default: [] })
   permissions: string[];
+
+  @Prop()
+  dateOfBirth: Date;
+
+  @Prop()
+  placeOfBirth: string;
+
+  @Prop()
+  country: string;
+
+  @Prop()
+  city: string;
+
+  @Prop()
+  postalCode: string;
+
+  @Prop()
+  occupationIndustry: string;
 }
 
 export type UserDocumentType = HydratedDocument<UserType>;

@@ -1,6 +1,6 @@
 import { AuthService } from '@/modules/auth/services/auth.service';
 import { Auth, UserContextParam } from '@common/decorators/auth.decorator';
-import { UserDocumentType } from '@common/models/user.schema';
+import { UserDocumentType } from '@common/models/user/user.schema';
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ConfirmEmailDto } from '../dtos/confirm-email-address.dto';

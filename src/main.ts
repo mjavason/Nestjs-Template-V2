@@ -8,7 +8,7 @@ import helmet from 'helmet';
 import { AppModule } from './app/app.module';
 import { initializeFirebase } from './configs/firebase/firebase-initializer';
 import { initializeLogger } from './configs/logger/logger-initializer';
-import { startupLoggerService } from './configs/logger/logger.service';
+import { StartupLoggerService } from './configs/logger/logger.service';
 import { initializeSentryTracing } from './configs/sentry/sentry.config';
 
 async function bootstrap() {
@@ -16,7 +16,7 @@ async function bootstrap() {
   initializeLogger();
   initializeFirebase();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: new startupLoggerService('app'),
+    logger: new StartupLoggerService('app'),
   });
 
   app.use(helmet());

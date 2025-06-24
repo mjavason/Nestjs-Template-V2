@@ -3,9 +3,9 @@ import { AppService } from '@/app.service';
 import { ZodValidationPipe } from '@anatine/zod-nestjs';
 import { HttpExceptionFilter } from '@common/filters/http-exception-filters';
 import { AuthMiddleware } from '@common/middleware/auth.middleware';
-import { User, UserSchema } from '@common/models/user.schema';
+import { User, UserSchema } from '@common/models/user/user.schema';
 import configuration from '@configs/configuration';
-import { startupLoggerModule } from '@configs/logger/logger.module';
+import { StartupLoggerModule } from '@configs/logger/logger.module';
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
@@ -17,7 +17,7 @@ import { AllSystemModules } from './modules.module';
   imports: [
     SentryModule,
     ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
-    startupLoggerModule,
+    StartupLoggerModule,
     AllSystemModules,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],

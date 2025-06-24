@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { File, FileSchema } from '../../common/models/file/file.schema';
 import { FileController } from './file.controller';
-import { File, FileSchema } from './file.schema';
 import { FileService } from './file.service';
 
 @Global()

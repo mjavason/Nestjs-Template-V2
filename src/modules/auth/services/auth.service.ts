@@ -6,9 +6,9 @@ import {
   authSignupOutputSchema,
 } from '@/modules/auth/types/auth-outputs.types';
 import { MailService } from '@/modules/mail/services/mail.service';
-import { Role, RoleDocumentType } from '@common/models/role.schema';
-import { Token, TokenDocumentType } from '@common/models/token.schema';
-import { User, UserDocumentType } from '@common/models/user.schema';
+import { Role, RoleDocumentType } from '@common/models/user/role.schema';
+import { Token, TokenDocumentType } from '@common/models/user/token.schema';
+import { User, UserDocumentType } from '@common/models/user/user.schema';
 import { TOKEN_TYPE } from '@common/types/token/token.enum';
 import { generateRandomAvatar } from '@common/utils/dicebar.util';
 import { stripToSchema } from '@common/utils/strip-to-schema.util';

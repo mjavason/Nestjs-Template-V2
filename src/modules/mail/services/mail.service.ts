@@ -31,7 +31,7 @@ export class MailService {
     mailSubject: string,
   ) => {
     void transporter.sendMail({
-      from: `startup <${configuration().MAIL_ADDRESS}>`,
+      from: `Startup <${configuration().MAIL_ADDRESS}>`,
       to: recipientEmail,
       subject: mailSubject,
       html: mailHtmlBody,

@@ -1,4 +1,4 @@
-import { RoleDocumentType } from '@common/models/role.schema';
+import { RoleDocumentType } from '@common/models/user/role.schema';
 import { Types } from 'mongoose';
 
 export type UserType = {
@@ -19,4 +19,11 @@ export type UserType = {
   status: string;
   isSuper: boolean;
   permissions: string[];
+
+  dateOfBirth: Date;
+  placeOfBirth: string;
+  country: string;
+  city: string;
+  postalCode: string;
+  occupationIndustry: string;
 };

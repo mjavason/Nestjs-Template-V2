@@ -1,7 +1,7 @@
 import { UserModule } from '@/modules/user/user.module';
-import { Role, RoleSchema } from '@common/models/role.schema';
-import { Token, TokenSchema } from '@common/models/token.schema';
-import { User, UserSchema } from '@common/models/user.schema';
+import { Role, RoleSchema } from '@common/models/user/role.schema';
+import { Token, TokenSchema } from '@common/models/user/token.schema';
+import { User, UserSchema } from '@common/models/user/user.schema';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MailModule } from '../mail/mail.module';

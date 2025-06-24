@@ -1,5 +1,5 @@
 import { Auth, UserContextParam } from '@common/decorators/auth.decorator';
-import { UserDocumentType } from '@common/models/user.schema';
+import { UserDocumentType } from '@common/models/user/user.schema';
 import { upload } from '@configs/multer/multer.config';
 import { MulterFileType } from '@configs/multer/multer.type';
 import {
@@ -36,7 +36,7 @@ export class FileController {
   ) {
     if (!uploadedFile) throw new BadRequestException('No file uploaded');
 
-    const data = await this.fileService.uploadToS3(
+    const data = await this.fileService.uploadToCloudinary(
       uploadedFile.path,
       auth.id,
       auth.id,
@@ -65,7 +65,7 @@ export class FileController {
 
     const uploadedFilesArray = await Promise.all(
       uploadedFiles.map(async (file) => {
-        const fileUploaded = await this.fileService.uploadToS3(
+        const fileUploaded = await this.fileService.uploadToCloudinary(
           file.path,
           auth.id, // folder
           auth.id, // author
@@ -88,6 +88,6 @@ export class FileController {
     @Param('url') url: string,
     @UserContextParam() auth: UserDocumentType,
   ) {
-    return await this.fileService.deleteFromS3(url, auth.id);
+    return await this.fileService.deleteFromCloudinary(url, auth.id);
   }
 }

@@ -30,5 +30,5 @@ export function initializeSentryTracing() {
     },
   });
 
-  Sentry.startSpan({ name: 'startup Span' }, () => {});
+  Sentry.startSpan({ name: 'Startup Span' }, () => {});
 }

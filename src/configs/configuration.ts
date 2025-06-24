@@ -14,4 +14,7 @@ export default () => ({
   [ConfigurationKey.MINIO_ENDPOINT]: process.env.MINIO_ENDPOINT,
   [ConfigurationKey.MINIO_BUCKET]: process.env.MINIO_BUCKET,
   [ConfigurationKey.APP_NAME]: process.env.APP_NAME,
+  [ConfigurationKey.CLOUDINARY_API_NAME]: process.env.CLOUDINARY_API_NAME,
+  [ConfigurationKey.CLOUDINARY_API_KEY]: process.env.CLOUDINARY_API_KEY,
+  [ConfigurationKey.CLOUDINARY_API_SECRET]: process.env.CLOUDINARY_API_SECRET,
 });
