@@ -1,9 +1,9 @@
-import { Auth, CurrentUser } from '@common/decorators/auth.decorator';
-import { UserDocumentType } from '@common/models/user/user.schema';
+import { AUTH_PERMISSIONS } from '@/modules/auth/auth.permission';
+import { Auth, UserContextParam } from '@common/decorators/auth.decorator';
+import { UserDocumentType } from '@common/models/user.schema';
 import { stripToSchema } from '@common/utils/strip-to-schema.util';
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AUTH_PERMISSIONS } from '../../../configs/constants/permissions/auth.permission';
 import {
   UserProfileOutputDto,
   userProfileOutputSchema,
@@ -16,7 +16,7 @@ export class UserController {
   @Auth([AUTH_PERMISSIONS.LOGIN])
   @ApiOkResponse({ type: UserProfileOutputDto })
   @ApiOperation({ summary: 'Retrieve logged in users profile' })
-  async profile(@CurrentUser() auth: UserDocumentType) {
+  async profile(@UserContextParam() auth: UserDocumentType) {
     return stripToSchema(userProfileOutputSchema, auth);
   }
 }

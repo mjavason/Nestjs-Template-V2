@@ -42,7 +42,7 @@ export function baseTemplate(firstName: string, textBody: string) {
                     ${textBody}
                 </div>
                 <div class="footer">
-                    <p>&copy; ${new Date().getFullYear()} Startup. All rights reserved.</p>
+                    <p>&copy; ${new Date().getFullYear()} startup. All rights reserved.</p>
                 </div>
             </div>
         </body>

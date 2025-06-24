@@ -1,4 +1,4 @@
-import { RoleDocumentType } from '@common/models/user/role.schema';
+import { RoleDocumentType } from '@common/models/role.schema';
 import { Types } from 'mongoose';
 
 export type UserType = {
@@ -14,7 +14,8 @@ export type UserType = {
   isPhoneNumberVerified: boolean;
   password: string;
   phoneNumber: string;
-  role: string | Types.ObjectId | RoleDocumentType;
+  roleId: string | Types.ObjectId;
+  role?: RoleDocumentType | null;
   status: string;
   isSuper: boolean;
   permissions: string[];

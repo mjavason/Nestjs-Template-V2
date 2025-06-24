@@ -8,23 +8,24 @@ import helmet from 'helmet';
 import { AppModule } from './app/app.module';
 import { initializeFirebase } from './configs/firebase/firebase-initializer';
 import { initializeLogger } from './configs/logger/logger-initializer';
-import { StartupLoggerService } from './configs/logger/logger.service';
+import { startupLoggerService } from './configs/logger/logger.service';
 import { initializeSentryTracing } from './configs/sentry/sentry.config';
 
-console.log('==== env check ===', process.env);
 async function bootstrap() {
   initializeSentryTracing();
   initializeLogger();
   initializeFirebase();
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: new StartupLoggerService('app'),
+    logger: new startupLoggerService('app'),
   });
 
   app.use(helmet());
   app.enableCors();
   app.use(json({ limit: '10mb' }));
   app.useGlobalInterceptors(new TransformInterceptor());
-
+  app.setGlobalPrefix('api/v1', {
+    exclude: ['/'],
+  });
   app.enableShutdownHooks();
   const port = process.env.PORT || 3001;
 

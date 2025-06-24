@@ -11,28 +11,27 @@ export class MailService {
   async sendSimpleMail(dto: SendMailDTO) {
     const sanitizedHTML = sanitizeHtml(dto.mailHtmlBody);
 
-    await this.sendMail(
+    this.sendMail(
       dto.recipientEmail,
       baseTemplate(dto.recipientFirstName, sanitizedHTML),
       dto.mailSubject,
     );
 
     log.info({
-      context: `${MailService.name}#sendSimpleMail`,
+      context: `${MailService.name}#${this.sendSimpleMail.name}`,
       message: 'New Simple Email Sent',
       data: dto,
     });
     return;
   }
 
-  private sendMail = async (
+  private sendMail = (
     recipientEmail: string,
     mailHtmlBody: string,
     mailSubject: string,
   ) => {
-    // This is where the actual email message is built. Things like CC, recipients, attachments, and so on are configured here.
-    return await transporter.sendMail({
-      from: `Startup <${configuration().MAIL_ADDRESS}>`,
+    void transporter.sendMail({
+      from: `startup <${configuration().MAIL_ADDRESS}>`,
       to: recipientEmail,
       subject: mailSubject,
       html: mailHtmlBody,

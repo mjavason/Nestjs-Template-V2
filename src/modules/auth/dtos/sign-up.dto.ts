@@ -7,10 +7,10 @@ export const signUpSchema = z.object({
     .email({ message: 'Invalid email format' }),
   firstName: z
     .string({ required_error: 'First name is required' })
-    .min(1, { message: 'First name is required' }),
+    .min(3, { message: 'First name is required' }),
   lastName: z
     .string({ required_error: 'Last name is required' })
-    .min(1, { message: 'Last name is required' }),
+    .min(3, { message: 'Last name is required' }),
   phoneNumber: z
     .string({ required_error: 'Phone number is required' })
     .min(11, { message: 'Phone number must be at least 11 characters' })
@@ -24,5 +24,5 @@ export const signUpSchema = z.object({
     .optional(),
 });
 
-export type SignUpSchema = z.infer<typeof signUpSchema>;
+export type SignUpInputType = z.infer<typeof signUpSchema>;
 export class SignUpDto extends createZodDto(signUpSchema) {}

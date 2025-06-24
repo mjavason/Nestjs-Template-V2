@@ -29,7 +29,7 @@ export class User implements UserType {
   phoneNumber: string;
 
   @Prop({ type: Types.ObjectId, ref: Role.name })
-  role: Types.ObjectId;
+  roleId: Types.ObjectId;
 
   @Prop({ default: USER_STATUS.ACTIVE })
   status: string;
@@ -61,6 +61,13 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.virtual('fullName').get(function (this: User) {
   return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
+});
+
+UserSchema.virtual('role', {
+  ref: Role.name,
+  localField: 'roleId',
+  foreignField: '_id',
+  justOne: true,
 });
 
 UserSchema.pre('save', async function preSave(next) {

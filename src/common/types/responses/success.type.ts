@@ -26,7 +26,7 @@ export const createSuccessResponseSchema = <T extends z.ZodTypeAny>(
       required_error: 'Message is required',
       invalid_type_error: 'Message must be a string',
     }),
-    data: dataSchema.optional(),
+    data: dataSchema,
   });
 
 export const successResponseSchema = createSuccessResponseSchema(z.unknown());

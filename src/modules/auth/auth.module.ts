@@ -1,8 +1,10 @@
 import { UserModule } from '@/modules/user/user.module';
-import { Role, RoleSchema } from '@common/models/user/role.schema';
-import { User, UserSchema } from '@common/models/user/user.schema';
+import { Role, RoleSchema } from '@common/models/role.schema';
+import { Token, TokenSchema } from '@common/models/token.schema';
+import { User, UserSchema } from '@common/models/user.schema';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MailModule } from '../mail/mail.module';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 
@@ -11,9 +13,10 @@ import { AuthService } from './services/auth.service';
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
-      // { name: Token.name, schema: tokenSchema }
+      { name: Token.name, schema: TokenSchema },
     ]),
     UserModule,
+    MailModule,
   ],
   providers: [AuthService],
   controllers: [AuthController],

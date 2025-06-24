@@ -24,7 +24,7 @@ export const sendMailSchema = z.object({
       required_error: 'Email HTML body is required',
       invalid_type_error: 'Email HTML body must be a string',
     })
-    .min(1, 'Email body must not be empty')
+    .min(3, 'Email body must not be empty')
     .max(100000, 'Email body too long'),
 
   mailSubject: z
@@ -32,7 +32,7 @@ export const sendMailSchema = z.object({
       required_error: 'Email subject is required',
       invalid_type_error: 'Email subject must be a string',
     })
-    .min(1, 'Subject must not be empty')
+    .min(3, 'Subject must not be empty')
     .max(998, 'Subject exceeds RFC limit'),
 });
 

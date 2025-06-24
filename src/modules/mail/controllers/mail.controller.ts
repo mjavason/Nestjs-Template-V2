@@ -17,7 +17,14 @@ export class MailController {
   @ApiOkResponse({ type: SimpleSuccessResponseDTO })
   @Auth()
   async sendMail(@Body() sendMailDTO: SendMailDTO) {
-    await this.mailService.sendSimpleMail(sendMailDTO);
+    await this.mailService.sendSimpleMail(sendMailDTO).catch((err) => {
+      log.error({
+        context: 'MailController#sendMail',
+        message: 'Failed to send email',
+        error: err,
+      });
+    });
+
     return { message: 'Mail sent successfully!' };
   }
 }

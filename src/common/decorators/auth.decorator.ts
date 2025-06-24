@@ -31,7 +31,7 @@ export function Auth(permissions: AnyPermission[] = []): MethodDecorator {
   );
 }
 
-export const CurrentUser = createParamDecorator(
+export const UserContextParam = createParamDecorator(
   (_data, ctx: ExecutionContext) => {
     const { user } = ctx.switchToHttp().getRequest();
     return user;

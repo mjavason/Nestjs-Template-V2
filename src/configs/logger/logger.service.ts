@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 @Injectable({ scope: Scope.TRANSIENT })
-export class StartupLoggerService implements LoggerService {
+export class startupLoggerService implements LoggerService {
   private readonly logger: PinoLogger;
   constructor(
     @Optional()

@@ -1,5 +1,4 @@
-import { RoleDocumentType } from '@common/models/user/role.schema';
-import { UserDocumentType } from '@common/models/user/user.schema';
+import { UserDocumentType } from '@common/models/user.schema';
 import {
   CanActivate,
   ExecutionContext,
@@ -23,7 +22,7 @@ export class PermissionsGuard implements CanActivate {
       user: UserDocumentType;
     };
     if (user.isSuper) return true;
-    const role = user.role as RoleDocumentType;
+    const role = user.role;
 
     const granted = new Set([
       ...(role?.permissions || []),

@@ -9,4 +9,9 @@ export default () => ({
   [ConfigurationKey.JWT_SECRET]: process.env.JWT_SECRET,
   [ConfigurationKey.MAIL_ADDRESS]: process.env.MAIL_ADDRESS,
   [ConfigurationKey.MAIL_PASSWORD]: process.env.MAIL_PASSWORD,
+  [ConfigurationKey.MINIO_ROOT_USER]: process.env.MINIO_ROOT_USER,
+  [ConfigurationKey.MINIO_ROOT_PASSWORD]: process.env.MINIO_ROOT_PASSWORD,
+  [ConfigurationKey.MINIO_ENDPOINT]: process.env.MINIO_ENDPOINT,
+  [ConfigurationKey.MINIO_BUCKET]: process.env.MINIO_BUCKET,
+  [ConfigurationKey.APP_NAME]: process.env.APP_NAME,
 });

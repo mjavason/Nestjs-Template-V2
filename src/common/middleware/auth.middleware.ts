@@ -1,5 +1,4 @@
-import { DecodedTokenType } from '@/modules/auth/interfaces/decoded-token.type';
-import { User, UserDocumentType } from '@common/models/user/user.schema';
+import { User, UserDocumentType } from '@common/models/user.schema';
 import configuration from '@configs/configuration';
 import {
   Injectable,
@@ -10,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import { Model } from 'mongoose';
+import { DecodedTokenType } from './types/decoded-token.type';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -19,7 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction): Promise<void> {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader?.startsWith('Bearer')) {
       throw new UnauthorizedException(
         'Invalid or missing Authorization header',
       );

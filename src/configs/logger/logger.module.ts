@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { StartupLoggerService } from './logger.service';
+import { startupLoggerService } from './logger.service';
 
 @Module({
-  providers: [StartupLoggerService],
-  exports: [StartupLoggerService],
+  providers: [startupLoggerService],
+  exports: [startupLoggerService],
 })
-export class StartupLoggerModule {}
+export class startupLoggerModule {}
