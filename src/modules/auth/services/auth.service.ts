@@ -1,17 +1,18 @@
 import { ConfirmEmailDto } from '@/modules/auth/dtos/confirm-email-address.dto';
 import { ConfirmPhoneNumberDto } from '@/modules/auth/dtos/confirm-phone-number.dto';
+import { ForgotPasswordDto } from '@/modules/auth/dtos/forgot-email.dto';
+import { ResetPasswordDto } from '@/modules/auth/dtos/reset-password.dto';
+import { SetPasswordDto } from '@/modules/auth/dtos/set-password.dto';
+import { LoginDto } from '@/modules/auth/dtos/sign-in.dto';
 import { SignUpInputType } from '@/modules/auth/dtos/sign-up.dto';
-import {
-  AuthSignupOutput,
-  authSignupOutputSchema,
-} from '@/modules/auth/types/auth-outputs.types';
+import { transformAuthSignup } from '@/modules/auth/transformers/auth-signup.transformer';
+import { AuthSignupOutput } from '@/modules/auth/types/auth-outputs.types';
 import { MailService } from '@/modules/mail/services/mail.service';
 import { Role, RoleDocumentType } from '@common/models/user/role.schema';
 import { Token, TokenDocumentType } from '@common/models/user/token.schema';
 import { User, UserDocumentType } from '@common/models/user/user.schema';
 import { TOKEN_TYPE } from '@common/types/token/token.enum';
 import { generateRandomAvatar } from '@common/utils/dicebar.util';
-import { stripToSchema } from '@common/utils/strip-to-schema.util';
 import configuration from '@configs/configuration';
 import {
   BadRequestException,
@@ -26,10 +27,6 @@ import { randomUUID } from 'crypto';
 import * as firebaseAdmin from 'firebase-admin';
 import * as jwt from 'jsonwebtoken';
 import { Model } from 'mongoose';
-import { ForgotPasswordDto } from '../dtos/forgot-email.dto';
-import { ResetPasswordDto } from '../dtos/reset-password.dto';
-import { SetPasswordDto } from '../dtos/set-password.dto';
-import { LoginDto } from '../dtos/sign-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -168,7 +165,7 @@ export class AuthService {
       message: 'New User Signup',
       data,
     });
-    return stripToSchema(authSignupOutputSchema, { ...user.toObject(), token });
+    return transformAuthSignup(user.toObject(), token);
   }
 
   async confirmEmail(dto: ConfirmEmailDto) {
@@ -272,7 +269,7 @@ export class AuthService {
       userId: user.id,
       email: user.email,
     });
-    return stripToSchema(authSignupOutputSchema, { ...user.toObject(), token });
+    return transformAuthSignup(user.toObject(), token);
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
@@ -348,7 +345,7 @@ export class AuthService {
     return jwt.sign(
       {
         expires: configuration().JWT_EXPIRY,
-        issuer: 'startup-api',
+        issuer: 'dinng-api',
         sub: data.id,
         iat: Math.floor(Date.now() / 1000),
         jti: randomUUID(),
