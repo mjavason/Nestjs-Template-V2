@@ -36,6 +36,7 @@ To ensure GitHub Actions run successfully, you must upload environment variables
 1. Install the GitHub CLI: [https://cli.github.com/](https://cli.github.com/)
 2. Authenticate with `gh auth login`
 3. Run the script below from the project root:
+4. Update the file then set your username and repo name
 
 ```powershell
 .\upload-env.ps1
