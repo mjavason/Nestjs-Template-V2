@@ -11,15 +11,15 @@ An all new and improved NestJS template. Supports JWT auth, Swagger docs, Zod va
 - **Logging**: Structured logging using `pino`, integrated with Sentry for error tracking.
 - **Mongoose ORM**: MongoDB integration via Mongoose.
 - **Environment Variables**: `.env`-based configuration.
-- **File Handling**: File uploads with support for S3 and Minio storage.
+- **File Handling**: File uploads with support for cloudinary and S3 storage.
 - **Email Support**: Email service for notifications or transactional messages.
-- **Caching**: Built-in support for caching strategies.
 - **Telegram Bot Error Monitoring**: Integration with Telegram Monitor Bot for error notifications.
 
 ## Prerequisites
 
 - Node.js
 - npm
+- GitHub CLI (`gh`)
 
 ## Installation
 
@@ -28,6 +28,20 @@ git clone https://github.com/mjavason/nest.js-template-app.git
 cd nest.js-template-app
 npm install
 ````
+
+## Setup GitHub Secrets
+
+To ensure GitHub Actions run successfully, you must upload environment variables as GitHub secrets.
+
+1. Install the GitHub CLI: [https://cli.github.com/](https://cli.github.com/)
+2. Authenticate with `gh auth login`
+3. Run the script below from the project root:
+
+```powershell
+.\upload-env.ps1
+```
+
+This will read your local `.env` file and upload all variables as secrets to your GitHub repository.
 
 ## Running the app
 
@@ -82,5 +96,4 @@ test/                         # E2E and unit tests
 ```
 
 ## Contributing
-
 Open a pull request or submit an issue to suggest improvements or report problems.
