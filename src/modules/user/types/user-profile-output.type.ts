@@ -18,6 +18,7 @@ export const userProfileOutputSchema = z.object({
   permissions: z.array(z.string()),
 });
 
+export type UserProfileOutput = z.infer<typeof userProfileOutputSchema>;
 const successResponseSchema = createSuccessResponseSchema(
   userProfileOutputSchema,
 );

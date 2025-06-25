@@ -1,4 +1,4 @@
-import { UserDocumentType } from '@common/models/user.schema';
+import { UserDocumentType } from '@common/models/user/user.schema';
 import { UserProfileOutput } from '../types/user-profile-output.type';
 
 export function transformUserProfile(

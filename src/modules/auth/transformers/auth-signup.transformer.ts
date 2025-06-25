@@ -1,4 +1,4 @@
-import { UserDocumentType } from '@common/models/user.schema';
+import { UserDocumentType } from '@common/models/user/user.schema';
 import { AuthSignupOutput } from '../types/auth-outputs.types';
 
 export function transformAuthSignup(
