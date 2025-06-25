@@ -25,8 +25,7 @@ jobs:
         run: yarn build
 
       - name: Start API with timeout
-        run: |
-          timeout 120s yarn start &
+        run: yarn start &
           sleep 10
         env:
           APP_STAGE: ${{ secrets.APP_STAGE }}
