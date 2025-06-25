@@ -24,11 +24,10 @@ jobs:
       - name: Build project
         run: yarn build
 
-      - name: Start API
+      - name: Start API with timeout
         run: |
-          yarn start &
+          timeout 60s yarn start &
           sleep 10
-          wait
         env:
           APP_STAGE: ${{ secrets.APP_STAGE }}
           PORT: ${{ secrets.PORT }}
