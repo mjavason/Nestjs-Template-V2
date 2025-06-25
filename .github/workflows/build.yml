@@ -26,7 +26,7 @@ jobs:
 
       - name: Start API with timeout
         run: |
-          timeout 60s npm run start:prod &
+          timeout 60s npm run start &
           sleep 10
         env:
           APP_STAGE: ${{ secrets.APP_STAGE }}
