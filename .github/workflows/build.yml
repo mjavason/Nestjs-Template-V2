@@ -19,14 +19,14 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Build project
-        run: npm run build
+        run: yarn build
 
       - name: Start API with timeout
         run: |
-          timeout 60s npm run start &
+          timeout 60s yarn start &
           sleep 10
         env:
           APP_STAGE: ${{ secrets.APP_STAGE }}
@@ -45,4 +45,3 @@ jobs:
           MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
           MINIO_BUCKET: ${{ secrets.MINIO_BUCKET }}
           APP_NAME: ${{ secrets.APP_NAME }}
-
