@@ -35,6 +35,7 @@ export class AppModule {
     consumer
       .apply(AuthMiddleware)
       .exclude(
+        { path: '/', method: RequestMethod.ALL },
         { path: '/app', method: RequestMethod.ALL },
         // { path: '/auth/(.*)', method: RequestMethod.ALL },
         { path: '/auth/sign_up', method: RequestMethod.POST },
@@ -43,6 +44,15 @@ export class AppModule {
         { path: '/auth/sign_in', method: RequestMethod.POST },
         { path: '/auth/forgot_password', method: RequestMethod.POST },
         { path: '/auth/reset_password', method: RequestMethod.POST },
+        {
+          path: '/auth/request_email_verification',
+          method: RequestMethod.POST,
+        },
+        {
+          path: 'auth/request_phone_number_verification',
+          method: RequestMethod.POST,
+        },
+        { path: '/role', method: RequestMethod.ALL },
       )
       .forRoutes('*');
   }

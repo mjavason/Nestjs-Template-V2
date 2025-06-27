@@ -1,4 +1,3 @@
-import configuration from '@configs/configuration';
 import {
   ArgumentsHost,
   BadRequestException,
@@ -13,7 +12,7 @@ import { MongooseError } from 'mongoose';
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
-    if (configuration().APP_STAGE === 'dev-local') console.error(exception);
+    // if (configuration().APP_STAGE === 'dev-local') console.error(exception);
 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
