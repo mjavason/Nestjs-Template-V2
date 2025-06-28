@@ -20,7 +20,11 @@ async function bootstrap() {
   });
 
   app.use(helmet());
-  app.enableCors();
+  app.enableCors({
+    origin: (origin, callback) => {
+      callback(null, true); // Accept all origins
+    },
+  });
   app.use(json({ limit: '10mb' }));
   app.useGlobalInterceptors(new TransformInterceptor());
   app.setGlobalPrefix('api/v1', {
