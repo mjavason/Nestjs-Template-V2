@@ -1,3 +1,8 @@
+import { FileService } from '@/modules/file/file.service';
+import {
+  FileUploadDTO,
+  MultiFileUploadDTO,
+} from '@/modules/file/types/file.dto';
 import { Auth, UserContextParam } from '@common/decorators/auth.decorator';
 import { UserDocumentType } from '@common/models/user/user.schema';
 import { upload } from '@configs/multer/multer.config';
@@ -14,8 +19,6 @@ import {
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { FileService } from './file.service';
-import { FileUploadDTO, MultiFileUploadDTO } from './types/file.dto';
 
 @Controller('file')
 @ApiTags('File')

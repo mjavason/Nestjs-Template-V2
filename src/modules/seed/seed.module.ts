@@ -1,15 +1,16 @@
-import { Role, RoleSchema } from '@common/models/user/role.schema';
-import { User, UserSchema } from '@common/models/user/user.schema';
+import { RoleSchema } from '@common/models/user/role.schema';
+import { UserSchema } from '@common/models/user/user.schema';
+import configuration from '@configs/configuration';
+import { SCHEMA_KEYS } from '@configs/constants/constants';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import 'dotenv/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DATABASE_URL),
+    MongooseModule.forRoot(configuration().DATABASE_URL),
     MongooseModule.forFeature([
-      { name: Role.name, schema: RoleSchema },
-      { name: User.name, schema: UserSchema },
+      { name: SCHEMA_KEYS.ROLE, schema: RoleSchema },
+      { name: SCHEMA_KEYS.USER, schema: UserSchema },
     ]),
   ],
 })

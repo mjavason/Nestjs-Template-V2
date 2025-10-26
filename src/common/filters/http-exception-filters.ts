@@ -1,3 +1,6 @@
+import configuration from '@configs/configuration';
+import { APP_STAGE } from '@configs/constants/constants';
+import logger from '@configs/logger/logger.config';
 import {
   ArgumentsHost,
   BadRequestException,
@@ -6,17 +9,16 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { MongooseError } from 'mongoose';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
-    // if (configuration().APP_STAGE === 'dev-local') console.error(exception);
+    if (configuration().APP_STAGE === APP_STAGE.LOCAL) console.error(exception);
 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
@@ -68,10 +70,26 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }
     }
 
-    response.status(status).json({
+    const errorResponse = {
       success: false,
       message,
       ...(errors && { errors }),
-    });
+    };
+
+    if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
+      logger.fatal({
+        context: HttpExceptionFilter.name,
+        message: 'Internal Server Error',
+        error: exception,
+      });
+    } else {
+      logger.error({
+        context: HttpExceptionFilter.name,
+        message: `Error Response [${status}]:`,
+        error: errorResponse,
+      });
+    }
+
+    response.status(status).json(errorResponse);
   }
 }

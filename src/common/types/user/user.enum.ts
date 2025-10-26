@@ -10,3 +10,10 @@ export enum USER_AUTH_METHODS {
   APPLE = 'apple',
   PHONE = 'phone',
 }
+
+export enum USER_KYC_STATUS {
+  NULL = 'null',
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  DECLINED = 'declined',
+}

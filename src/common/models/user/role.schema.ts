@@ -8,7 +8,7 @@ import { HydratedDocument } from 'mongoose';
   toJSON: { virtuals: true },
 })
 export class Role implements RoleType {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   name: string;
 
   @Prop({

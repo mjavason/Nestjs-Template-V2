@@ -1,7 +1,7 @@
 import { PermissionsGuard } from '@common/guards/permission.guard';
 import { AnyPermission } from '@common/types/permissions.type';
-import { ErrorResponseDTO } from '@common/types/responses/error.type';
-import { SimpleSuccessResponseDTO } from '@common/types/responses/success.type';
+import { ErrorResponseDto } from '@common/types/responses/error.type';
+import { SimpleSuccessResponseDto } from '@common/types/responses/success.type';
 import {
   applyDecorators,
   createParamDecorator,
@@ -21,12 +21,12 @@ export function Auth(permissions: AnyPermission[] = []): MethodDecorator {
   return applyDecorators(
     SetMetadata('permissions', permissions),
     UseGuards(PermissionsGuard),
-    ApiBadRequestResponse({ type: ErrorResponseDTO }),
+    ApiBadRequestResponse({ type: ErrorResponseDto }),
     ApiUnauthorizedResponse({
-      type: SimpleSuccessResponseDTO,
+      type: SimpleSuccessResponseDto,
     }),
-    ApiForbiddenResponse({ type: SimpleSuccessResponseDTO }),
-    ApiInternalServerErrorResponse({ type: SimpleSuccessResponseDTO }),
+    ApiForbiddenResponse({ type: SimpleSuccessResponseDto }),
+    ApiInternalServerErrorResponse({ type: SimpleSuccessResponseDto }),
     ApiBearerAuth(),
   );
 }

@@ -1,7 +1,5 @@
-import { Types } from 'mongoose';
-
 export type TokenType = {
-  userId: string | Types.ObjectId;
+  userId: string;
   type: string;
   token: string;
   expiresAt: number;

@@ -1,6 +1,6 @@
+import { FileType } from '@/modules/file/types/file.type';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
-import { FileType } from '../../../modules/file/types/file.type';
 
 @Schema({
   timestamps: true,

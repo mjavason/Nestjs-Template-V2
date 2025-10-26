@@ -1,3 +1,4 @@
+import { DecodedTokenType } from '@/common/middleware/types/decoded-token.type';
 import { User, UserDocumentType } from '@common/models/user/user.schema';
 import configuration from '@configs/configuration';
 import {
@@ -9,7 +10,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import { Model } from 'mongoose';
-import { DecodedTokenType } from './types/decoded-token.type';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {

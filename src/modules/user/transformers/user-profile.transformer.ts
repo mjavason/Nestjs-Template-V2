@@ -1,5 +1,5 @@
+import { UserProfileOutput } from '@/modules/user/types/user-profile-output.type';
 import { UserDocumentType } from '@common/models/user/user.schema';
-import { UserProfileOutput } from '../types/user-profile-output.type';
 
 export function transformUserProfile(
   user: UserDocumentType,
@@ -7,18 +7,15 @@ export function transformUserProfile(
   return {
     id: user._id.toString(),
     email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    fullName: user.fullName,
-    username: user.username,
+    userName: user.userName,
     pictureUrl: user.pictureUrl,
     isEmailVerified: user.isEmailVerified,
-    isPhoneNumberVerified: user.isPhoneNumberVerified,
-    role: {
-      name: user.role?.name,
-    },
+    role: user.role,
     status: user.status,
     isSuper: user.isSuper,
     permissions: user.permissions,
+    is2FAEnabled: user.is2FAEnabled,
+    hasActiveSubscription: user.hasActiveSubscription,
+    isAutoSubscriptionEnabled: user.isAutoSubscriptionEnabled,
   };
 }

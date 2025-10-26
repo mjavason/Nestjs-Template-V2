@@ -1,25 +1,29 @@
 import { AppController } from '@/app.controller';
-import { AppService } from '@/app.service';
+import { AppService } from '@/app/app.service';
+import { AllSystemModules } from '@/app/modules.module';
 import { ZodValidationPipe } from '@anatine/zod-nestjs';
 import { HttpExceptionFilter } from '@common/filters/http-exception-filters';
+import {
+  excludeAll,
+  excludeGet,
+  excludePost,
+} from '@common/helpers/middleware-exclude.helper';
 import { AuthMiddleware } from '@common/middleware/auth.middleware';
-import { User, UserSchema } from '@common/models/user/user.schema';
+import { UserSchema } from '@common/models/user/user.schema';
 import configuration from '@configs/configuration';
-import { StartupLoggerModule } from '@configs/logger/logger.module';
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { SCHEMA_KEYS } from '@configs/constants/constants';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup';
-import { AllSystemModules } from './modules.module';
 
 @Module({
   imports: [
     SentryModule,
     ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
-    StartupLoggerModule,
+    MongooseModule.forFeature([{ name: SCHEMA_KEYS.USER, schema: UserSchema }]),
     AllSystemModules,
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AppController],
   providers: [
@@ -29,30 +33,26 @@ import { AllSystemModules } from './modules.module';
     AppService,
   ],
 })
-@Module({})
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
       .exclude(
-        { path: '/', method: RequestMethod.ALL },
-        { path: '/app', method: RequestMethod.ALL },
-        // { path: '/auth/(.*)', method: RequestMethod.ALL },
-        { path: '/auth/sign_up', method: RequestMethod.POST },
-        { path: '/auth/confirm_email', method: RequestMethod.POST },
-        { path: '/auth/confirm_phone_number', method: RequestMethod.POST },
-        { path: '/auth/sign_in', method: RequestMethod.POST },
-        { path: '/auth/forgot_password', method: RequestMethod.POST },
-        { path: '/auth/reset_password', method: RequestMethod.POST },
-        {
-          path: '/auth/request_email_verification',
-          method: RequestMethod.POST,
-        },
-        {
-          path: 'auth/request_phone_number_verification',
-          method: RequestMethod.POST,
-        },
-        { path: '/role', method: RequestMethod.ALL },
+        ...excludeAll(['/', '/app', '/role', '/the_odds/(.*)']),
+        ...excludePost([
+          '/auth/social_auth',
+          '/auth/sign_up',
+          '/auth/confirm_email',
+          '/auth/confirm_phone_number',
+          '/auth/sign_in',
+          '/auth/forgot_password',
+          '/auth/reset_password',
+          '/auth/verify_2fa',
+          '/auth/request_email_verification',
+          '/auth/request_phone_number_verification',
+          '/auth/username/(.*)',
+        ]),
+        ...excludeGet(['/config']),
       )
       .forRoutes('*');
   }

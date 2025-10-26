@@ -1,7 +1,7 @@
-import { AUTH_PERMISSIONS } from '../modules/auth/auth.permission';
-import { MAIL_PERMISSIONS } from '../modules/mail/mail.permission';
-import { ROLE_PERMISSIONS } from '../modules/user/role.permission';
-import { USER_PERMISSIONS } from '../modules/user/user.permission';
+import { AUTH_PERMISSIONS } from '@/modules/auth/auth.permission';
+import { MAIL_PERMISSIONS } from '@/modules/mail/mail.permission';
+import { ROLE_PERMISSIONS } from '@/modules/user/permissions/role.permission';
+import { USER_PERMISSIONS } from '@/modules/user/permissions/user.permission';
 
 export enum APP_PERMISSIONS {
   READ_STATUS = 'read_status',

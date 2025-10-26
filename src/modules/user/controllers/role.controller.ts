@@ -4,13 +4,14 @@ import { APP_MODULES } from '@configs/constants/constants';
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
+// TODO: Not all roles should be visible to the public. On the role schema, add a isPublic field. PS: All permissions should be hidden by default
 @Controller('role')
 @ApiTags('Role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Get()
-  @Auth()
+  // @Auth()
   @ApiOperation({ summary: 'Retrieve all roles' })
   async findAll() {
     return this.roleService.findAll();

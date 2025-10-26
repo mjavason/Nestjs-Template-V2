@@ -1,5 +1,5 @@
+import { AuthSignupOutput } from '@/modules/auth/types/auth-outputs.types';
 import { UserDocumentType } from '@common/models/user/user.schema';
-import { AuthSignupOutput } from '../types/auth-outputs.types';
 
 export function transformAuthSignup(
   user: UserDocumentType,
@@ -8,6 +8,8 @@ export function transformAuthSignup(
   return {
     id: user.id,
     email: user.email,
+    isEmailVerified: user.isEmailVerified,
+    userName: user.userName,
     token,
   };
 }

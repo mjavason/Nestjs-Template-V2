@@ -1,12 +1,12 @@
+import { FileModule } from '@/modules/file/file.module';
+import { RoleController } from '@/modules/user/controllers/role.controller';
+import { UserController } from '@/modules/user/controllers/user.controller';
+import { RoleService } from '@/modules/user/services/role.service';
+import { UserService } from '@/modules/user/services/user.service';
 import { Role, RoleSchema } from '@common/models/user/role.schema';
 import { User, UserSchema } from '@common/models/user/user.schema';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RoleController } from './controllers/role.controller';
-import { UserController } from './controllers/user.controller';
-import { RoleService } from './services/role.service';
-import { UserService } from './services/user.service';
-('@common/models/user/user.schema');
 
 @Module({
   imports: [
@@ -14,6 +14,7 @@ import { UserService } from './services/user.service';
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
     ]),
+    FileModule,
   ],
   controllers: [UserController, RoleController],
   providers: [UserService, RoleService],

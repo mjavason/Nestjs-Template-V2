@@ -1,4 +1,4 @@
-import { SuccessResponseDTO } from '@common/types/responses/success.type';
+import { SuccessResponseDto } from '@common/types/responses/success.type';
 import { MESSAGES } from '@configs/constants/messages';
 import {
   CallHandler,
@@ -11,12 +11,12 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class TransformInterceptor<T>
-  implements NestInterceptor<T, SuccessResponseDTO>
+  implements NestInterceptor<T, SuccessResponseDto<T>>
 {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<SuccessResponseDTO> {
+  ): Observable<SuccessResponseDto<T>> {
     return next.handle().pipe(
       map((originalData) => {
         const { message, success, data, ...rest } =

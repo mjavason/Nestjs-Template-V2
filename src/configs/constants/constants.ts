@@ -3,6 +3,7 @@ export enum ConfigurationKey {
   APP_STAGE = 'APP_STAGE',
   SENTRY_DNS_URL = 'SENTRY_DNS_URL',
   DATABASE_URL = 'DATABASE_URL',
+  BASE_URL = 'BASE_URL',
   JWT_EXPIRY = 'JWT_EXPIRY',
   JWT_SECRET = 'JWT_SECRET',
   MAIL_ADDRESS = 'MAIL_ADDRESS',
@@ -15,12 +16,30 @@ export enum ConfigurationKey {
   CLOUDINARY_API_NAME = 'CLOUDINARY_API_NAME',
   CLOUDINARY_API_KEY = 'CLOUDINARY_API_KEY',
   CLOUDINARY_API_SECRET = 'CLOUDINARY_API_SECRET',
+  FIREBASE_CLIENT_EMAIL = 'FIREBASE_CLIENT_EMAIL',
+  FIREBASE_PRIVATE_KEY = 'FIREBASE_PRIVATE_KEY',
+  FIREBASE_PROJECT_ID = 'FIREBASE_PROJECT_ID',
+  NODE_ENV = 'NODE_ENV',
+  REDIS_HOST = 'REDIS_HOST',
+  REDIS_PORT = 'REDIS_PORT',
+  REDIS_PASSWORD = 'REDIS_PASSWORD',
+  NOW_PAYMENTS_BASE_URL = 'NOW_PAYMENTS_BASE_URL',
+  NOW_PAYMENTS_API_KEY = 'NOW_PAYMENTS_API_KEY',
+  NOW_PAYMENTS_DEPOSIT_CALLBACK_URL = 'NOW_PAYMENTS_DEPOSIT_CALLBACK_URL',
+  NOW_PAYMENTS_PAYOUT_CALLBACK_URL = 'NOW_PAYMENTS_PAYOUT_CALLBACK_URL',
+  NOW_PAYMENTS_EMAIL = 'NOW_PAYMENTS_EMAIL',
+  NOW_PAYMENTS_PASSWORD = 'NOW_PAYMENTS_PASSWORD',
+  NOW_PAYMENTS_TOTP_SECRET = 'NOW_PAYMENTS_TOTP_SECRET',
+  LOKI_HOST = 'LOKI_HOST',
+  LOKI_USERNAME = 'LOKI_USERNAME',
+  LOKI_BASIC_AUTH = 'LOKI_BASIC_AUTH',
+  SMTP_BRIDGE_PASSWORD = 'SMTP_BRIDGE_PASSWORD',
 }
 
 export enum APP_STAGE {
-  LOCAL = 'dev-local',
+  LOCAL = 'local',
+  STAGING = 'staging',
   PRODUCTION = 'prod',
-  DEMO = 'demo',
 }
 
 export enum APP_MODULES {
@@ -30,3 +49,29 @@ export enum APP_MODULES {
   ROLE = 'role',
   USER = 'user',
 }
+
+export const SCHEMA_KEYS = {
+  FILE: 'File',
+  ROLE: 'Role',
+  TOKEN: 'Token',
+  USER: 'User',
+};
+
+export enum TimeDurationInSeconds {
+  OneMonth = 30 * 24 * 60 * 60,
+  OneWeek = 7 * 24 * 60 * 60,
+  OneDay = 24 * 60 * 60,
+  TwelveHours = 12 * 60 * 60,
+  OneHour = 60 * 60,
+  ThirtyMinutes = 30 * 60,
+  FifteenMinutes = 15 * 60,
+  FiveMinutes = 5 * 60,
+  OneMinute = 60,
+  ThirtySeconds = 30,
+  TenSeconds = 10,
+  OneSecond = 1,
+}
+
+export const APP_NAME = 'Startup';
+export const FreeVideosPerDay = 1000;
+export const VideoHeartBeatDurationInSeconds = 30;

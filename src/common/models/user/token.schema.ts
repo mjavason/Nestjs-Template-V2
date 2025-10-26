@@ -1,7 +1,7 @@
+import { User } from '@common/models/user/user.schema';
 import { TokenType } from '@common/types/token/token.type';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { User } from './user.schema';
 
 @Schema({
   timestamps: true,
@@ -16,7 +16,7 @@ import { User } from './user.schema';
 })
 export class Token implements TokenType {
   @Prop({ type: Types.ObjectId, ref: User.name, required: true })
-  userId: Types.ObjectId;
+  userId: string;
 
   @Prop({ required: true })
   type: string;

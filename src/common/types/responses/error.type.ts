@@ -1,11 +1,12 @@
-import { createZodDto } from '@anatine/zod-nestjs';
-import { z } from 'zod';
+import { ApiProperty } from '@nestjs/swagger';
 
-export const errorResponseSchema = z.object({
-  success: z.boolean(),
-  message: z.string(),
-  errors: z.array(z.string()).optional(),
-});
+export class ErrorResponseDto {
+  @ApiProperty()
+  success: boolean;
 
-export type ErrorResponseSchema = z.infer<typeof errorResponseSchema>;
-export class ErrorResponseDTO extends createZodDto(errorResponseSchema) {}
+  @ApiProperty()
+  message: string;
+
+  @ApiProperty({ required: false })
+  errors?: string[];
+}

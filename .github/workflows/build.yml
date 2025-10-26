@@ -1,10 +1,8 @@
 name: Build and Run API
 
 on:
-  push:
-    branches: [dev, main]
   pull_request:
-    branches: [dev, main]
+    branches: [production, main]
 
 jobs:
   build-and-run:
@@ -24,9 +22,12 @@ jobs:
       - name: Build project
         run: yarn build
 
+      - name: Run tests with coverage
+        run: yarn test:cov
+
       - name: Start API with timeout
         run: |
-          timeout 60s yarn start &
+          timeout 60s yarn start:prod &
           sleep 10
         env:
           APP_STAGE: ${{ secrets.APP_STAGE }}
@@ -43,5 +44,15 @@ jobs:
           MINIO_ROOT_USER: ${{ secrets.MINIO_ROOT_USER }}
           MINIO_ROOT_PASSWORD: ${{ secrets.MINIO_ROOT_PASSWORD }}
           MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
-          MINIO_BUCKET: ${{ secrets.MINIO_BUCKET }}
-          APP_NAME: ${{ secrets.APP_NAME }}
+          BUCKET: ${{ secrets.MINIO_BUCKET }}
+          CLOUDINARY_API_NAME: ${{ secrets.CLOUDINARY_API_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          LOKI_HOST: ${{ secrets.LOKI_HOST }}
+          LOKI_USERNAME: ${{ secrets.LOKI_USERNAME }}
+          LOKI_BASIC_AUTH: ${{ secrets.LOKI_BASIC_AUTH }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}

@@ -1,9 +1,9 @@
+import { Role } from '@common/models/user/role.schema';
 import { USER_STATUS } from '@common/types/user/user.enum';
 import { UserType } from '@common/types/user/user.type';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { HydratedDocument, Types } from 'mongoose';
-import { Role } from './role.schema';
 
 @Schema({
   timestamps: true,
@@ -19,32 +19,20 @@ export class User implements UserType {
   @Prop({ default: false })
   isEmailVerified: boolean;
 
-  @Prop({ default: false })
-  isPhoneNumberVerified: boolean;
-
   @Prop({ select: false })
   password: string;
 
-  @Prop({ unique: true, sparse: true })
-  phoneNumber: string;
-
   @Prop({ type: Types.ObjectId, ref: Role.name })
-  roleId: Types.ObjectId;
+  roleId: string;
 
   @Prop({ default: USER_STATUS.ACTIVE })
   status: string;
-
-  @Prop({ required: true })
-  firstName: string;
-
-  @Prop({ required: true })
-  lastName: string;
 
   @Prop({ unique: true, index: true })
   email: string;
 
   @Prop({ unique: true, sparse: true })
-  username: string;
+  userName: string;
 
   @Prop()
   authMethod: string;
@@ -55,38 +43,18 @@ export class User implements UserType {
   @Prop({ default: [] })
   permissions: string[];
 
-  @Prop()
-  dateOfBirth: Date;
+  @Prop({ default: false })
+  is2FAEnabled: boolean;
 
-  @Prop()
-  placeOfBirth: string;
+  @Prop({ default: false })
+  hasActiveSubscription: boolean;
 
-  @Prop()
-  country: string;
-
-  @Prop()
-  city: string;
-
-  @Prop()
-  postalCode: string;
-
-  @Prop()
-  occupationIndustry: string;
+  @Prop({ default: true })
+  isAutoSubscriptionEnabled: boolean;
 }
 
 export type UserDocumentType = HydratedDocument<UserType>;
 export const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.virtual('fullName').get(function (this: User) {
-  return `${this.firstName ?? ''} ${this.lastName ?? ''}`.trim();
-});
-
-UserSchema.virtual('role', {
-  ref: Role.name,
-  localField: 'roleId',
-  foreignField: '_id',
-  justOne: true,
-});
 
 UserSchema.pre('save', async function preSave(next) {
   if (this.isModified('password') || (this.isNew && this.password)) {
@@ -94,4 +62,22 @@ UserSchema.pre('save', async function preSave(next) {
     this.password = await bcrypt.hash(this.password, saltOrRounds);
   }
   next();
+});
+
+// Hash on findOneAndUpdate (covers findByIdAndUpdate)
+UserSchema.pre('findOneAndUpdate', async function (next) {
+  const update = this.getUpdate() as { password?: string };
+  if (update && update.password) {
+    const saltOrRounds = 10;
+    update.password = await bcrypt.hash(update.password, saltOrRounds);
+    this.setUpdate(update);
+  }
+  next();
+});
+
+UserSchema.virtual('role', {
+  ref: Role.name,
+  localField: 'roleId',
+  foreignField: '_id',
+  justOne: true,
 });

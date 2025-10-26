@@ -7,8 +7,8 @@ export const resetPasswordSchema = z.object({
     .email({ message: 'Invalid email address' }),
   token: z
     .string({ required_error: 'Token is required' })
-    .length(6, { message: 'Token must be exactly 6 digits' })
-    .regex(/^\d{6}$/, { message: 'Token must be a 6-digit number' }),
+    .length(5, { message: 'Token must be exactly 5 digits' })
+    .regex(/^\d{5}$/, { message: 'Token must be a 5-digit number' }),
   password: z
     .string({ required_error: 'Password is required' })
     .min(8, 'Password must be at least 8 characters')

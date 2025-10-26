@@ -1,15 +1,15 @@
+import { ConfirmEmailDto } from '@/modules/auth/dtos/confirm-email-address.dto';
+import { ForgotPasswordDto } from '@/modules/auth/dtos/forgot-email.dto';
+import { RequestEmailVerificationDto } from '@/modules/auth/dtos/request-email-verification.dto';
+import { ResetPasswordDto } from '@/modules/auth/dtos/reset-password.dto';
+import { LoginDto } from '@/modules/auth/dtos/sign-in.dto';
+import { SignUpDto } from '@/modules/auth/dtos/sign-up.dto';
+import { SocialSignUpDto } from '@/modules/auth/dtos/social-signup.dto';
+import { Verify2FADto } from '@/modules/auth/dtos/verify-2fa.dto';
 import { AuthService } from '@/modules/auth/services/auth.service';
-import { Auth, UserContextParam } from '@common/decorators/auth.decorator';
-import { UserDocumentType } from '@common/models/user/user.schema';
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ConfirmEmailDto } from '../dtos/confirm-email-address.dto';
-import { ConfirmPhoneNumberDto } from '../dtos/confirm-phone-number.dto';
-import { ForgotPasswordDto } from '../dtos/forgot-email.dto';
-import { ResetPasswordDto } from '../dtos/reset-password.dto';
-import { SetPasswordDto } from '../dtos/set-password.dto';
-import { LoginDto } from '../dtos/sign-in.dto';
-import { SignUpDto } from '../dtos/sign-up.dto';
+import { AuthSignupOutputDto } from '@/modules/auth/types/auth-outputs.types';
+import { Body, Controller, Param, Post } from '@nestjs/common';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -18,46 +18,25 @@ export class AuthController {
 
   @Post('sign_up')
   @ApiOperation({ summary: 'Sign up' })
-  @ApiBody({ type: SignUpDto })
+  @ApiOkResponse({ type: AuthSignupOutputDto })
   async register(@Body() body: SignUpDto) {
     return await this.authService.signUpUser(body);
   }
 
   @Post('confirm_email')
   @ApiOperation({ summary: 'Confirm email address with token' })
-  @ApiBody({ type: ConfirmEmailDto })
   async confirmEmail(@Body() body: ConfirmEmailDto) {
     return await this.authService.confirmEmail(body);
   }
 
-  @Post('create_password')
-  @ApiOperation({ summary: 'Create password' })
-  @ApiBody({ type: SetPasswordDto })
-  @Auth()
-  async createPassword(
-    @Body() body: SetPasswordDto,
-    @UserContextParam() auth: UserDocumentType,
-  ) {
-    return await this.authService.createPassword(body, auth.id);
-  }
-
-  @Post('confirm_phone_number')
-  @ApiOperation({ summary: 'Confirm phone number with token' })
-  @ApiBody({ type: ConfirmPhoneNumberDto })
-  async confirmPhoneNumber(@Body() body: ConfirmPhoneNumberDto) {
-    return await this.authService.confirmPhoneNumber(body);
-  }
-
   @Post('sign_in')
   @ApiOperation({ summary: 'Login user' })
-  @ApiBody({ type: LoginDto })
   async login(@Body() body: LoginDto) {
     return await this.authService.login(body);
   }
 
   @Post('forgot_password')
   @ApiOperation({ summary: 'Forgot password request' })
-  @ApiBody({ type: ForgotPasswordDto })
   async forgotPassword(@Body() body: ForgotPasswordDto) {
     return await this.authService.forgotPassword(body);
   }
@@ -66,8 +45,36 @@ export class AuthController {
   @ApiOperation({
     summary: 'Continuation of forgot password flow. Reset password',
   })
-  @ApiBody({ type: ResetPasswordDto })
   async resetPassword(@Body() body: ResetPasswordDto) {
     return await this.authService.resetPassword(body);
+  }
+
+  @Post('request_email_verification')
+  @ApiOperation({ summary: 'Request email verification' })
+  async requestEmail(@Body() dto: RequestEmailVerificationDto) {
+    return await this.authService.requestEmailVerification(dto);
+  }
+
+  @Post('username/:userName')
+  @ApiOperation({ summary: 'Is user name available?' })
+  async isUserNameAvailable(@Param('userName') userName: string) {
+    return await this.authService.isUserNameAvailable(userName);
+  }
+
+  @Post('social_auth')
+  @ApiOperation({
+    summary: 'Social auth',
+    description:
+      'Use this to get a google token if need be: https://get-my-social-token.onrender.com/',
+  })
+  async socialRegister(@Body() body: SocialSignUpDto) {
+    return await this.authService.socialAuth(body);
+  }
+
+  @Post('verify_2fa')
+  @ApiOperation({ summary: 'Verify 2FA code' })
+  @ApiOkResponse({ type: AuthSignupOutputDto })
+  async verify2FA(@Body() body: Verify2FADto) {
+    return await this.authService.verifyTwoFactor(body.email, body.code);
   }
 }

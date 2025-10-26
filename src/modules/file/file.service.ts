@@ -1,3 +1,4 @@
+import { FileDocumentType } from '@/common/models/file/file.schema';
 import {
   CreateBucketCommand,
   DeleteObjectCommand,
@@ -6,6 +7,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { cloudinaryInstance } from '@configs/cloudinary/cloudinary.config';
 import configuration from '@configs/configuration';
+import { APP_NAME } from '@configs/constants/constants';
 import { s3 } from '@configs/s3/s3.config';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,7 +15,6 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { FileDocumentType } from '../../common/models/file/file.schema';
 
 @Injectable()
 export class FileService {
@@ -54,7 +55,7 @@ export class FileService {
 
     const fileContent = fs.readFileSync(filePath);
     const fileExtension = path.extname(filePath);
-    const fileKey = `${configuration().APP_NAME}/${folder}/${uuidv4()}${fileExtension}`;
+    const fileKey = `${APP_NAME}/${folder}/${uuidv4()}${fileExtension}`;
 
     const uploadCommand = new PutObjectCommand({
       Bucket: configuration().MINIO_BUCKET,
@@ -102,7 +103,7 @@ export class FileService {
     author: string = '001x',
   ) {
     const imageUpload = await cloudinaryInstance.uploader.upload(path, {
-      folder: `${configuration().APP_NAME}/${folder}`,
+      folder: `${APP_NAME}/${folder}`,
       // resource_type: 'raw',
     });
 

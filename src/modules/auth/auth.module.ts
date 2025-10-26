@@ -1,19 +1,20 @@
+import { AuthController } from '@/modules/auth/controllers/auth.controller';
+import { AuthService } from '@/modules/auth/services/auth.service';
+import { MailModule } from '@/modules/mail/mail.module';
 import { UserModule } from '@/modules/user/user.module';
-import { Role, RoleSchema } from '@common/models/user/role.schema';
-import { Token, TokenSchema } from '@common/models/user/token.schema';
-import { User, UserSchema } from '@common/models/user/user.schema';
+import { RoleSchema } from '@common/models/user/role.schema';
+import { TokenSchema } from '@common/models/user/token.schema';
+import { UserSchema } from '@common/models/user/user.schema';
+import { SCHEMA_KEYS } from '@configs/constants/constants';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MailModule } from '../mail/mail.module';
-import { AuthController } from './controllers/auth.controller';
-import { AuthService } from './services/auth.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: Role.name, schema: RoleSchema },
-      { name: Token.name, schema: TokenSchema },
+      { name: SCHEMA_KEYS.USER, schema: UserSchema },
+      { name: SCHEMA_KEYS.ROLE, schema: RoleSchema },
+      { name: SCHEMA_KEYS.TOKEN, schema: TokenSchema },
     ]),
     UserModule,
     MailModule,

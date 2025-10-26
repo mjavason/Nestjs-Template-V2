@@ -1,17 +1,37 @@
-/**
- * this are the outputs for auth
- */
+import { ApiProperty } from '@nestjs/swagger';
 
-import { createZodDto } from '@anatine/zod-nestjs';
-import { createSuccessResponseSchema } from '@common/types/responses/success.type';
-import { z } from 'zod';
+export type AuthSignupOutput = {
+  id: string;
+  email: string;
+  token: string;
+  isEmailVerified: boolean;
+  userName: string;
+};
 
-export const authSignupOutputSchema = z.object({
-  id: z.string(),
-  email: z.string(),
-  token: z.string(),
-});
+export class AuthSignupOutputData implements AuthSignupOutput {
+  @ApiProperty()
+  id: string;
 
-export type AuthSignupOutput = z.infer<typeof authSignupOutputSchema>;
-const successSchema = createSuccessResponseSchema(authSignupOutputSchema);
-export const AuthSignupOutputDto = createZodDto(successSchema);
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  token: string;
+
+  @ApiProperty()
+  isEmailVerified: boolean;
+
+  @ApiProperty()
+  userName: string;
+}
+
+export class AuthSignupOutputDto {
+  @ApiProperty({ type: Boolean, example: true })
+  success: boolean;
+
+  @ApiProperty({ type: String, example: 'Successful' })
+  message: string;
+
+  @ApiProperty({ type: AuthSignupOutputData })
+  data: AuthSignupOutputData;
+}

@@ -3,4 +3,5 @@ export enum TOKEN_TYPE {
   EMAIL_CONFIRM = 'email-confirm',
   PHONE_CONFIRM = 'phone-confirm',
   REFRESH_TOKEN = 'refresh-token',
+  TWO_FACTOR = 'two-factor',
 }

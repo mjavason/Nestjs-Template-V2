@@ -1,7 +1,3 @@
-/**
- * this file contains all root level modules in the application
- */
-
 import { AuthModule } from '@/modules/auth/auth.module';
 import { DatabaseModule } from '@/modules/db/database.module';
 import { FileModule } from '@/modules/file/file.module';

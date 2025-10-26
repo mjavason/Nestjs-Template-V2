@@ -1,9 +1,12 @@
-import { USER_PERMISSIONS } from '@/modules/user/user.permission';
+import { SeedModule } from '@/modules/seed/seed.module';
+import {
+  ADMIN_PERMISSIONS,
+  USER_PERMISSIONS,
+} from '@/modules/user/permissions/user.permission';
 import { Role } from '@common/models/user/role.schema';
 import { User } from '@common/models/user/user.schema';
 import { NestFactory } from '@nestjs/core';
 import { getModelToken } from '@nestjs/mongoose';
-import { SeedModule } from './seed.module';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SeedModule);
@@ -16,7 +19,10 @@ async function bootstrap() {
   if (!adminRole) {
     adminRole = await RoleModel.create({
       name: 'admin',
-      permissions: Object.values(USER_PERMISSIONS),
+      permissions: [
+        ...Object.values(USER_PERMISSIONS),
+        ...Object.values(ADMIN_PERMISSIONS),
+      ],
     });
     console.log('Admin role created');
   } else {
@@ -29,12 +35,11 @@ async function bootstrap() {
 
   if (!adminUserExists) {
     await UserModel.create({
-      firstName: 'Tester',
-      lastName: 'Zero',
       email: 'testerzero@gmail.com',
       password: 'Strong@password123',
+      userName: 'testerzero',
       isSuper: true,
-      role: adminRole._id,
+      roleId: adminRole.id,
       isEmailVerified: true,
     });
     console.log('Admin user created');

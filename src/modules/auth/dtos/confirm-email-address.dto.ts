@@ -7,8 +7,8 @@ export const confirmEmailSchema = z.object({
     .email({ message: 'Invalid email format' }),
   token: z
     .string({ required_error: 'Token is required' })
-    .length(6, { message: 'Token must be exactly 6 digits' })
-    .regex(/^\d{6}$/, { message: 'Token must be a 6-digit number' }),
+    .length(5, { message: 'Token must be exactly 5 digits' })
+    .regex(/^\d{5}$/, { message: 'Token must be a 5-digit number' }),
 });
 
 export type ConfirmEmailInputType = z.infer<typeof confirmEmailSchema>;

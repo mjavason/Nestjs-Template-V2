@@ -1,38 +1,36 @@
-import { createZodDto } from '@anatine/zod-nestjs';
-import { z } from 'zod';
+import { ApiProperty } from '@nestjs/swagger';
 
-export const paginationSchema = z.object({
-  hasNextPage: z.boolean(),
-  totalPages: z.number(),
-  totalCount: z.number(),
-  nextPage: z.number().nullable(),
-  hasPreviousPage: z.boolean(),
-});
+export class PaginationDto {
+  @ApiProperty()
+  hasNextPage: boolean;
 
-export const SimpleSuccessResponseSchema = z.object({
-  success: z.boolean(),
-  message: z.string(),
-});
+  @ApiProperty()
+  totalPages: number;
 
-export const createSuccessResponseSchema = <T extends z.ZodTypeAny>(
-  dataSchema: T,
-) =>
-  z.object({
-    success: z.boolean({
-      required_error: 'Success flag is required',
-      invalid_type_error: 'Success must be a boolean',
-    }),
-    message: z.string({
-      required_error: 'Message is required',
-      invalid_type_error: 'Message must be a string',
-    }),
-    data: dataSchema,
-  });
+  @ApiProperty()
+  totalCount: number;
 
-export const successResponseSchema = createSuccessResponseSchema(z.unknown());
+  @ApiProperty()
+  nextPage: number | null;
 
-export type PaginationType = z.infer<typeof paginationSchema>;
-export class SuccessResponseDTO extends createZodDto(successResponseSchema) {}
-export class SimpleSuccessResponseDTO extends createZodDto(
-  SimpleSuccessResponseSchema,
-) {}
+  @ApiProperty()
+  hasPreviousPage: boolean;
+}
+
+export class SimpleSuccessResponseDto {
+  @ApiProperty({ type: Boolean, example: true })
+  success: boolean;
+
+  @ApiProperty({ type: String, example: 'Successful' })
+  message: string;
+}
+
+export class SuccessResponseDto<T> {
+  @ApiProperty({ type: Boolean, example: true })
+  success: boolean;
+
+  @ApiProperty({ type: String, example: 'Successful' })
+  message: string;
+
+  data: T;
+}
