@@ -39,7 +39,7 @@ export class MailService {
       message: 'Sending mail via transporter',
       recipientEmail,
       subject: mailSubject,
-      from: `StartupX <${configuration().MAIL_ADDRESS}>`,
+      from: `Startup <${configuration().MAIL_ADDRESS}>`,
     });
 
     await transporter.sendMail({
