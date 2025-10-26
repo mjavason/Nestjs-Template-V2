@@ -27,7 +27,7 @@ An all new and improved NestJS template. Supports JWT auth, Swagger docs, Zod va
 git clone https://github.com/mjavason/nest.js-template-app.git
 cd nest.js-template-app
 npm install
-````
+```
 
 ## Setup GitHub Secrets
 
@@ -35,14 +35,30 @@ To ensure GitHub Actions run successfully, you must upload environment variables
 
 1. Install the GitHub CLI: [https://cli.github.com/](https://cli.github.com/)
 2. Authenticate with `gh auth login`
-3. Run the script below from the project root:
-4. Update the file then set your username and repo name
+3. **Important**: Update the `upload-env.ps1` file with your GitHub username and repository name:
+   - Open `upload-env.ps1`
+   - Replace `mjavason/startup` with your `username/repository-name`
+4. Run the script from the project root:
 
 ```powershell
 .\upload-env.ps1
 ```
 
 This will read your local `.env` file and upload all variables as secrets to your GitHub repository.
+
+**Note**: You only need to run this script once after initial setup or when you add new environment variables.
+
+## Docker Deployment
+
+This template includes GitHub Actions that automatically build your application and push it to a **public Docker repository** when changes are made to the main branch.
+
+**Important**: Be aware that your built Docker image will be publicly accessible. Ensure that:
+
+- Your application code doesn't contain sensitive information
+- All sensitive data is properly managed through environment variables
+- You're comfortable with your code being publicly available in containerized form
+
+The automated deployment process will handle building and pushing your Docker image without any manual intervention once the GitHub Actions are properly configured with your environment variables.
 
 ## Running the app
 
@@ -97,4 +113,5 @@ test/                         # E2E and unit tests
 ```
 
 ## Contributing
+
 Open a pull request or submit an issue to suggest improvements or report problems.
