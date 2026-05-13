@@ -5,6 +5,7 @@ import {
 } from '@/modules/user/permissions/user.permission';
 import { Role } from '@common/models/user/role.schema';
 import { User } from '@common/models/user/user.schema';
+import { UserTypeEnum } from '@common/types/user/user.enum';
 import { NestFactory } from '@nestjs/core';
 import { getModelToken } from '@nestjs/mongoose';
 
@@ -35,12 +36,15 @@ async function bootstrap() {
 
   if (!adminUserExists) {
     await UserModel.create({
+      firstName: 'Tester',
+      lastName: 'Zero',
       email: 'testerzero@gmail.com',
       password: 'Strong@password123',
       userName: 'testerzero',
       isSuper: true,
       roleId: adminRole.id,
       isEmailVerified: true,
+      userType: UserTypeEnum.SUPER,
     });
     console.log('Admin user created');
   } else {
