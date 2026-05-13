@@ -1,4 +1,5 @@
 import { ConfirmEmailDto } from '@/modules/auth/dtos/confirm-email-address.dto';
+import { ConfirmPhoneNumberDto } from '@/modules/auth/dtos/confirm-phone-number.dto';
 import { ForgotPasswordDto } from '@/modules/auth/dtos/forgot-email.dto';
 import { RequestEmailVerificationDto } from '@/modules/auth/dtos/request-email-verification.dto';
 import { ResetPasswordDto } from '@/modules/auth/dtos/reset-password.dto';
@@ -6,16 +7,18 @@ import { LoginDto } from '@/modules/auth/dtos/sign-in.dto';
 import { SignUpInputType } from '@/modules/auth/dtos/sign-up.dto';
 import { SocialSignUpDto } from '@/modules/auth/dtos/social-signup.dto';
 import { transformAuthSignup } from '@/modules/auth/transformers/auth-signup.transformer';
+import { AuthSignupOutputData } from '@/modules/auth/types/auth-outputs.types';
 import { MailService } from '@/modules/mail/services/mail.service';
 import { Token, TokenDocumentType } from '@common/models/user/token.schema';
 import { User, UserDocumentType } from '@common/models/user/user.schema';
 import { TOKEN_TYPE } from '@common/types/token/token.enum';
+import { UserStatusEnum } from '@common/types/user/user.enum';
 import { generateRandomAvatar } from '@common/utils/dicebar.util';
 import configuration from '@configs/configuration';
-import { APP_NAME } from '@configs/constants/constants';
 import log from '@configs/logger/logger.config';
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotImplementedException,
   UnauthorizedException,
@@ -29,7 +32,7 @@ import { randomUUID } from 'crypto';
 import * as firebaseAdmin from 'firebase-admin';
 import * as jwt from 'jsonwebtoken';
 import { Model } from 'mongoose';
-import { AuthSignupOutputData } from '../types/auth-outputs.types';
+import { RequestPhoneNumberVerificationDto } from '../dtos/request-phone-verification';
 
 @Injectable()
 export class AuthService {
@@ -39,6 +42,12 @@ export class AuthService {
     private readonly tokenModel: Model<TokenDocumentType>,
     private readonly mailService: MailService,
   ) {}
+
+  isUserActive(user: UserDocumentType) {
+    if (user.status !== UserStatusEnum.ACTIVE) {
+      throw new ForbiddenException('User account is disabled');
+    }
+  }
 
   async verifyIdToken(data: SocialSignUpDto) {
     if (data.provider === 'google.com') {
@@ -80,11 +89,10 @@ export class AuthService {
 
   async socialAuth(data: SocialSignUpDto): Promise<AuthSignupOutputData> {
     const decoded = await this.verifyIdToken(data);
-
-    const email = decoded.email.toLowerCase();
-    const userName = extractEmailUsername(email);
+    const userName = decoded.email;
+    const email = decoded.email;
     let user = await this.userModel.findOne({
-      email,
+      $or: [{ email: email }, { userName }],
     });
 
     if (!user) {
@@ -93,7 +101,7 @@ export class AuthService {
         userName,
         pictureUrl: decoded.picture,
         isEmailVerified: true,
-        authMethod: data.provider,
+        authMethod: 'social',
       });
     } else {
       log.info({
@@ -114,16 +122,22 @@ export class AuthService {
       email,
     });
 
+    this.isUserActive(user);
     return transformAuthSignup(user.toObject(), token);
   }
 
   async signUpUser(data: SignUpInputType): Promise<AuthSignupOutputData> {
     try {
       const userName = extractEmailUsername(data.email);
-      const password = data.password;
+      const password = data.password ?? Date.now();
 
       const existingUser = await this.userModel.findOne(
-        { email: data.email.toLowerCase() },
+        {
+          $or: [
+            { email: data.email.toLowerCase() },
+            { userName: userName.toLowerCase() },
+          ],
+        },
         { _id: 1, email: 1, userName: 1 },
       );
       if (existingUser) {
@@ -156,6 +170,7 @@ export class AuthService {
         message: 'New User Signup',
         data,
       });
+
       return transformAuthSignup(user.toObject(), token);
     } catch (err) {
       log.error({
@@ -198,17 +213,40 @@ export class AuthService {
     return { message: 'Email verified successfully' };
   }
 
+  async confirmPhoneNumber(dto: ConfirmPhoneNumberDto) {
+    const errorMessage = 'Invalid or expired token';
+
+    const user = await this.userModel.findOne({ phoneNumber: dto.phoneNumber });
+    if (!user) throw new BadRequestException(errorMessage);
+    if (user.isPhoneNumberVerified)
+      return { message: 'Phone verified successfully' };
+
+    const token = await this.tokenModel.findOne({
+      userId: user.id,
+      token: dto.token,
+      type: TOKEN_TYPE.EMAIL_CONFIRM, // TODO: Implement SMS service
+    });
+    if (!token) throw new BadRequestException(errorMessage);
+    if (Date.now() > token.expiresAt)
+      throw new BadRequestException(errorMessage);
+
+    user.isPhoneNumberVerified = true;
+    await user.save();
+    await token.deleteOne();
+
+    log.info({
+      context: `${AuthService.name}#${this.confirmPhoneNumber.name}`,
+      message: 'Phone number verified successfully',
+      phoneNumber: dto.phoneNumber,
+    });
+
+    return { message: 'Phone verified successfully' };
+  }
+
   async login(dto: LoginDto) {
     const user = await this.userModel.findOne(
       { email: dto.email.toLowerCase() },
-      {
-        password: 1,
-        email: 1,
-        firstName: 1,
-        is2FAEnabled: 1,
-        isEmailVerified: 1,
-        userName: 1,
-      },
+      { password: 1, email: 1, firstName: 1, is2FAEnabled: 1, isActive: 1 },
     );
 
     if (!user || !user?.password)
@@ -229,8 +267,8 @@ export class AuthService {
         expiresAt: new Date(Date.now() + convertMinuteToUTC(10)),
       });
 
-      await this.mailService.sendSimpleMail({
-        recipientFirstName: user.userName,
+      this.mailService.sendSimpleMail({
+        recipientFirstName: user.firstName,
         recipientEmail: user.email,
         mailHtmlBody: `Your 2FA code is: ${code}`,
         mailSubject: 'Your Two-Factor Authentication Code',
@@ -259,6 +297,7 @@ export class AuthService {
       email: user.email,
     });
 
+    this.isUserActive(user);
     return transformAuthSignup(user.toObject(), token);
   }
 
@@ -315,7 +354,7 @@ export class AuthService {
     });
 
     await this.mailService.sendSimpleMail({
-      recipientFirstName: user.userName,
+      recipientFirstName: user.firstName,
       recipientEmail: user.email,
       mailHtmlBody: code,
       mailSubject: 'Password reset code',
@@ -367,7 +406,7 @@ export class AuthService {
     return jwt.sign(
       {
         expires: configuration().JWT_EXPIRY,
-        issuer: APP_NAME,
+        issuer: 'betguard-api',
         sub: data.id,
         iat: Math.floor(Date.now() / 1000),
         jti: randomUUID(),
@@ -395,13 +434,45 @@ export class AuthService {
     void this.mailService.sendSimpleMail({
       recipientFirstName: user.userName,
       recipientEmail: user.email,
-      mailHtmlBody: `Email verification code: ${code}`,
+      mailHtmlBody: code,
       mailSubject: 'Verify your email',
     });
 
     log.info({
       context: `${AuthService.name}#${this.sendEmailVerification.name}`,
       message: 'Email confirmation code sent',
+      email: user.email,
+    });
+  }
+
+  async sendPhoneVerification(user: UserDocumentType) {
+    // TODO: Use sms when available
+
+    log.info({
+      context: `${AuthService.name}#${this.sendPhoneVerification.name}`,
+      message: 'User created',
+      userId: user.id,
+      email: user.email,
+    });
+
+    const code = generateRandomDigits(5);
+    void this.tokenModel.create({
+      userId: user.id,
+      type: TOKEN_TYPE.PHONE_CONFIRM,
+      token: code,
+      expiresAt: new Date(Date.now() + convertMinuteToUTC(5)),
+    });
+
+    void this.mailService.sendSimpleMail({
+      recipientFirstName: user.userName,
+      recipientEmail: user.email,
+      mailHtmlBody: code,
+      mailSubject: 'Verify your phone number',
+    });
+
+    log.info({
+      context: `${AuthService.name}#${this.sendPhoneVerification.name}`,
+      message: 'Phone confirmation code sent',
       email: user.email,
     });
   }
@@ -415,6 +486,18 @@ export class AuthService {
     if (!user) return message;
 
     await this.sendEmailVerification(user);
+    return message;
+  }
+
+  async requestPhoneVerification(data: RequestPhoneNumberVerificationDto) {
+    const message = { message: 'Verification sms sent successfully' };
+
+    const user = await this.userModel.findOne({
+      phoneNumber: data.phone.toLowerCase(),
+    });
+    if (!user) return message;
+
+    await this.sendPhoneVerification(user);
     return message;
   }
 

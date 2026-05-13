@@ -6,6 +6,8 @@ export function transformUserProfile(
 ): UserProfileOutput {
   return {
     id: user._id.toString(),
+    firstName: user.firstName,
+    lastName: user.lastName,
     email: user.email,
     userName: user.userName,
     pictureUrl: user.pictureUrl,

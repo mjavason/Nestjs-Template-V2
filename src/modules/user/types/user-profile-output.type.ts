@@ -7,6 +7,12 @@ export class UserProfileOutput {
   id: string;
 
   @ApiProperty()
+  firstName: string;
+
+  @ApiProperty()
+  lastName: string;
+
+  @ApiProperty()
   email: string;
 
   @ApiProperty({ required: false })

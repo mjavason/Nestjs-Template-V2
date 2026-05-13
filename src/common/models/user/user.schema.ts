@@ -13,11 +13,26 @@ import { HydratedDocument, Types } from 'mongoose';
   },
 })
 export class User implements UserType {
+  @Prop({ required: true })
+  firstName: string;
+
+  @Prop({ required: true })
+  lastName: string;
+
   @Prop()
   pictureUrl: string;
 
+  @Prop({ unique: true, index: true })
+  email: string;
+
   @Prop({ default: false })
   isEmailVerified: boolean;
+
+  @Prop({ default: null })
+  phoneNumber: string;
+
+  @Prop({ default: false })
+  isPhoneNumberVerified: boolean;
 
   @Prop({ select: false })
   password: string;
@@ -27,9 +42,6 @@ export class User implements UserType {
 
   @Prop({ default: UserStatusEnum.ACTIVE })
   status: string;
-
-  @Prop({ unique: true, index: true })
-  email: string;
 
   @Prop({ unique: true, sparse: true })
   userName: string;
