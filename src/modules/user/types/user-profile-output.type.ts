@@ -1,4 +1,5 @@
 import { RoleDocumentType } from '@common/models/user/role.schema';
+import { PaginationDto } from '@common/types/responses/success.type';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserProfileOutput {
@@ -51,4 +52,23 @@ export class UserProfileOutputDto {
 
   @ApiProperty({ type: UserProfileOutput })
   data: UserProfileOutput;
+}
+
+export class PaginatedUserProfileOutputDto {
+  @ApiProperty({ type: UserProfileOutput, isArray: true })
+  items: UserProfileOutput[];
+
+  @ApiProperty({ type: PaginationDto })
+  pagination: PaginationDto;
+}
+
+export class UserProfileArrayOutputDto {
+  @ApiProperty({ type: Boolean, example: true })
+  success: boolean;
+
+  @ApiProperty({ type: String, example: 'Successful' })
+  message: string;
+
+  @ApiProperty({ type: PaginatedUserProfileOutputDto })
+  data: PaginatedUserProfileOutputDto;
 }

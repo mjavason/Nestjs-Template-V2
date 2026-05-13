@@ -1,7 +1,7 @@
-import { PermissionsGuard } from '@common/guards/permission.guard';
-import { AnyPermission } from '@common/types/permissions.type';
+import { UserTypeGuard } from '@common/guards/user-type.guard';
 import { ErrorResponseDto } from '@common/types/responses/error.type';
 import { SimpleSuccessResponseDto } from '@common/types/responses/success.type';
+import { UserTypeEnum } from '@common/types/user/user.enum';
 import {
   applyDecorators,
   createParamDecorator,
@@ -17,10 +17,11 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-export function Auth(permissions: AnyPermission[] = []): MethodDecorator {
+export function Auth(userType: UserTypeEnum[] = []): MethodDecorator {
   return applyDecorators(
-    SetMetadata('permissions', permissions),
-    UseGuards(PermissionsGuard),
+    SetMetadata('userType', userType),
+    // UseGuards(PermissionsGuard),
+    UseGuards(UserTypeGuard),
     ApiBadRequestResponse({ type: ErrorResponseDto }),
     ApiUnauthorizedResponse({
       type: SimpleSuccessResponseDto,
