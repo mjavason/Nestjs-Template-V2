@@ -123,7 +123,7 @@ export class AuthService {
     });
 
     this.isUserActive(user);
-    return transformAuthSignup(user.toObject(), token);
+    return transformAuthSignup(user, token);
   }
 
   async signUpUser(data: SignUpInputType): Promise<AuthSignupOutputData> {
@@ -171,7 +171,7 @@ export class AuthService {
         data,
       });
 
-      return transformAuthSignup(user.toObject(), token);
+      return transformAuthSignup(user, token);
     } catch (err) {
       log.error({
         context: `${AuthService.name}#${this.signUpUser.name}`,
@@ -246,7 +246,15 @@ export class AuthService {
   async login(dto: LoginDto) {
     const user = await this.userModel.findOne(
       { email: dto.email.toLowerCase() },
-      { password: 1, email: 1, firstName: 1, is2FAEnabled: 1, isActive: 1 },
+      {
+        password: 1,
+        email: 1,
+        firstName: 1,
+        is2FAEnabled: 1,
+        isActive: 1,
+        userType: 1,
+        isSuper: 1,
+      },
     );
 
     if (!user || !user?.password)
@@ -298,7 +306,7 @@ export class AuthService {
     });
 
     this.isUserActive(user);
-    return transformAuthSignup(user.toObject(), token);
+    return transformAuthSignup(user, token);
   }
 
   async verifyTwoFactor(email: string, code: string) {
@@ -330,7 +338,7 @@ export class AuthService {
       email: user.email,
     });
 
-    return transformAuthSignup(user.toObject(), token);
+    return transformAuthSignup(user, token);
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
