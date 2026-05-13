@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'betguard',
+      name: 'startup',
       script: 'dist/main.js',
       exec_mode: 'fork',
       instances: 1,

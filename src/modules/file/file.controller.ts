@@ -2,14 +2,20 @@ import { FileService } from '@/modules/file/file.service';
 import {
   FileUploadDTO,
   MultiFileUploadDTO,
+  MultipartCompleteDTO,
+  MultipartInitDTO,
+  MultipartListDTO,
+  MultipartSignDTO,
+  MultipartSignSingleDTO,
+  SingleUploadSignDTO,
 } from '@/modules/file/types/file.dto';
 import { Auth, UserContextParam } from '@common/decorators/auth.decorator';
 import { UserDocumentType } from '@common/models/user/user.schema';
-import { UserTypeEnum } from '@common/types/user/user.enum';
 import { upload } from '@configs/multer/multer.config';
 import { MulterFileType } from '@configs/multer/multer.type';
 import {
   BadRequestException,
+  Body,
   Controller,
   Delete,
   Param,
@@ -87,11 +93,98 @@ export class FileController {
     description:
       'This removes the file from the file database and from cloudinary itself',
   })
-  @Auth([UserTypeEnum.ADMIN])
+  @Auth()
   async deleteUpload(
     @Param('url') url: string,
     @UserContextParam() auth: UserDocumentType,
   ) {
     return await this.fileService.deleteFromCloudinary(url, auth.id);
+  }
+
+  @Post('upload/sign')
+  @ApiOperation({
+    summary: 'Get signed URL for single file upload (S3 PUT)',
+    description: 'Returns a presigned URL for direct S3 upload (non-multipart)',
+  })
+  @ApiBody({ type: SingleUploadSignDTO })
+  @Auth()
+  async signSingleUpload(@Body() body: SingleUploadSignDTO) {
+    return await this.fileService.getSingleUploadSignedUrl(
+      body.fileName,
+      body.contentType,
+    );
+  }
+
+  @Post('multipart/init')
+  @ApiOperation({
+    summary: 'Initialize a multipart upload',
+    description:
+      'Initializes a multipart upload and returns the upload ID and key',
+  })
+  @ApiBody({ type: MultipartInitDTO })
+  @Auth()
+  async initializeMultipartUpload(@Body() body: MultipartInitDTO) {
+    return await this.fileService.initializeMultipartUpload(
+      body.fileName,
+      body.contentType,
+    );
+  }
+
+  @Post('multipart/sign')
+  @ApiOperation({
+    summary: 'Get signed URLs for multipart upload',
+    description: 'Returns signed URLs for each part of a multipart upload',
+  })
+  @ApiBody({ type: MultipartSignDTO })
+  @Auth()
+  async signMultipartUpload(@Body() body: MultipartSignDTO) {
+    return await this.fileService.signMultipartUploadParts(
+      body.key,
+      body.uploadId,
+      body.parts,
+    );
+  }
+
+  @Post('multipart/sign-single')
+  @ApiOperation({
+    summary: 'Get signed URL for one multipart part',
+    description: 'Returns a signed URL for a specific multipart part',
+  })
+  @ApiBody({ type: MultipartSignSingleDTO })
+  @Auth()
+  async signSingleMultipartPart(@Body() body: MultipartSignSingleDTO) {
+    return await this.fileService.signSingleMultipartUploadPart(
+      body.key,
+      body.uploadId,
+      body.partNumber,
+    );
+  }
+
+  @Post('multipart/list')
+  @ApiOperation({
+    summary: 'List uploaded parts for a multipart upload',
+  })
+  @ApiBody({ type: MultipartListDTO })
+  @Auth()
+  async listMultipartParts(@Body() body: MultipartListDTO) {
+    return await this.fileService.listMultipartUploadParts(
+      body.key,
+      body.uploadId,
+    );
+  }
+
+  @Post('multipart/complete')
+  @ApiOperation({
+    summary: 'Complete a multipart upload',
+    description: 'Assembles uploaded parts and finalizes the upload',
+  })
+  @ApiBody({ type: MultipartCompleteDTO })
+  @Auth()
+  async completeMultipartUpload(@Body() body: MultipartCompleteDTO) {
+    return await this.fileService.completeMultipartUpload(
+      body.key,
+      body.uploadId,
+      body.parts,
+    );
   }
 }

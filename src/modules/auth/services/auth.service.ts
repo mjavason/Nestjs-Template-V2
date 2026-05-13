@@ -406,7 +406,7 @@ export class AuthService {
     return jwt.sign(
       {
         expires: configuration().JWT_EXPIRY,
-        issuer: 'betguard-api',
+        issuer: 'startup-api',
         sub: data.id,
         iat: Math.floor(Date.now() / 1000),
         jti: randomUUID(),

@@ -5,6 +5,7 @@ import log from '@configs/logger/logger.config';
 import { transporter } from '@configs/mail/mail.config';
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import emailTemplates from '../templates/email.template';
 import { baseTemplate } from './templates/base';
 import { simpleMailContent } from './templates/base-content';
 
@@ -21,7 +22,14 @@ export class MailService {
     return;
   }
 
-  private sendMail = async (
+  async sendWelcomeMail(recipientEmail: string, firstName: string) {
+    const subject = `Welcome to ${APP_NAME}!`;
+    const mailHtml = emailTemplates.welcome(firstName);
+
+    await this.sendMail(recipientEmail, mailHtml, subject);
+  }
+
+  sendMail = async (
     recipientEmail: string,
     mailHtmlBody: string,
     mailSubject: string,
@@ -39,11 +47,11 @@ export class MailService {
       message: 'Sending mail via transporter',
       recipientEmail,
       subject: mailSubject,
-      from: `Startup <${configuration().MAIL_ADDRESS}>`,
+      from: `${APP_NAME} <${configuration().MAIL_SENDER_FROM}>`,
     });
 
     await transporter.sendMail({
-      from: `Startup <${configuration().MAIL_ADDRESS}>`,
+      from: `${APP_NAME} <${configuration().MAIL_SENDER_FROM}>`,
       to: recipientEmail,
       subject: mailSubject,
       html: mailHtmlBody,
