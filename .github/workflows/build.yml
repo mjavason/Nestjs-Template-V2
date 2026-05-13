@@ -32,27 +32,42 @@ jobs:
         env:
           APP_STAGE: ${{ secrets.APP_STAGE }}
           PORT: ${{ secrets.PORT }}
+
           SENTRY_DNS_URL: ${{ secrets.SENTRY_DNS_URL }}
+
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
           FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
           JWT_EXPIRY: ${{ secrets.JWT_EXPIRY }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
           MAIL_ADDRESS: ${{ secrets.MAIL_ADDRESS }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          MINIO_ROOT_USER: ${{ secrets.MINIO_ROOT_USER }}
-          MINIO_ROOT_PASSWORD: ${{ secrets.MINIO_ROOT_PASSWORD }}
-          MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
-          BUCKET: ${{ secrets.MINIO_BUCKET }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_SENDER_FROM: ${{ secrets.MAIL_SENDER_FROM }}
+
+          SMTP_BRIDGE_PASSWORD: ${{ secrets.SMTP_BRIDGE_PASSWORD }}
+
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+          S3_ROOT_USER: ${{ secrets.S3_ROOT_USER }}
+          S3_ROOT_PASSWORD: ${{ secrets.S3_ROOT_PASSWORD }}
+
           CLOUDINARY_API_NAME: ${{ secrets.CLOUDINARY_API_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+
           BASE_URL: ${{ secrets.BASE_URL }}
-          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+
           LOKI_HOST: ${{ secrets.LOKI_HOST }}
           LOKI_USERNAME: ${{ secrets.LOKI_USERNAME }}
           LOKI_BASIC_AUTH: ${{ secrets.LOKI_BASIC_AUTH }}
+
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
           REDIS_PORT: ${{ secrets.REDIS_PORT }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
