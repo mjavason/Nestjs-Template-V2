@@ -15,4 +15,5 @@ export type UserType = {
   is2FAEnabled: boolean;
   hasActiveSubscription: boolean;
   isAutoSubscriptionEnabled: boolean;
+  userType: string;
 };

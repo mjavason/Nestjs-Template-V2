@@ -1,15 +1,16 @@
-import { AuthSignupOutput } from '@/modules/auth/types/auth-outputs.types';
 import { UserDocumentType } from '@common/models/user/user.schema';
+import { AuthSignupOutputData } from '../types/auth-outputs.types';
 
 export function transformAuthSignup(
   user: UserDocumentType,
   token: string,
-): AuthSignupOutput {
+): AuthSignupOutputData {
   return {
     id: user.id,
     email: user.email,
     isEmailVerified: user.isEmailVerified,
     userName: user.userName,
     token,
+    userType: user.userType,
   };
 }

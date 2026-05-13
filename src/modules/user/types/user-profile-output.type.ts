@@ -37,6 +37,9 @@ export class UserProfileOutput {
 
   @ApiProperty()
   isAutoSubscriptionEnabled: boolean;
+
+  @ApiProperty()
+  userType: string;
 }
 
 export class UserProfileOutputDto {

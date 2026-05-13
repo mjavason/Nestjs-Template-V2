@@ -1,9 +1,9 @@
-export enum USER_STATUS {
+export enum UserStatusEnum {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
 }
 
-export enum USER_AUTH_METHODS {
+export enum UserAuthMethodEnum {
   EMAIL = 'email',
   GOOGLE = 'google',
   FACEBOOK = 'facebook',
@@ -11,9 +11,15 @@ export enum USER_AUTH_METHODS {
   PHONE = 'phone',
 }
 
-export enum USER_KYC_STATUS {
+export enum UserKycStatusEnum {
   NULL = 'null',
   PENDING = 'pending',
   APPROVED = 'approved',
   DECLINED = 'declined',
+}
+
+export enum UserTypeEnum {
+  USER = 'user',
+  ADMIN = 'admin',
+  SUPER = 'super',
 }

@@ -17,5 +17,6 @@ export function transformUserProfile(
     is2FAEnabled: user.is2FAEnabled,
     hasActiveSubscription: user.hasActiveSubscription,
     isAutoSubscriptionEnabled: user.isAutoSubscriptionEnabled,
+    userType: user.userType,
   };
 }

@@ -1,14 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export type AuthSignupOutput = {
-  id: string;
-  email: string;
-  token: string;
-  isEmailVerified: boolean;
-  userName: string;
-};
-
-export class AuthSignupOutputData implements AuthSignupOutput {
+export class AuthSignupOutputData {
   @ApiProperty()
   id: string;
 
@@ -23,6 +15,9 @@ export class AuthSignupOutputData implements AuthSignupOutput {
 
   @ApiProperty()
   userName: string;
+
+  @ApiProperty()
+  userType: string;
 }
 
 export class AuthSignupOutputDto {

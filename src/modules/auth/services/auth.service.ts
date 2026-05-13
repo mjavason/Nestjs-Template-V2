@@ -6,7 +6,6 @@ import { LoginDto } from '@/modules/auth/dtos/sign-in.dto';
 import { SignUpInputType } from '@/modules/auth/dtos/sign-up.dto';
 import { SocialSignUpDto } from '@/modules/auth/dtos/social-signup.dto';
 import { transformAuthSignup } from '@/modules/auth/transformers/auth-signup.transformer';
-import { AuthSignupOutput } from '@/modules/auth/types/auth-outputs.types';
 import { MailService } from '@/modules/mail/services/mail.service';
 import { Token, TokenDocumentType } from '@common/models/user/token.schema';
 import { User, UserDocumentType } from '@common/models/user/user.schema';
@@ -30,6 +29,7 @@ import { randomUUID } from 'crypto';
 import * as firebaseAdmin from 'firebase-admin';
 import * as jwt from 'jsonwebtoken';
 import { Model } from 'mongoose';
+import { AuthSignupOutputData } from '../types/auth-outputs.types';
 
 @Injectable()
 export class AuthService {
@@ -78,7 +78,7 @@ export class AuthService {
     }
   }
 
-  async socialAuth(data: SocialSignUpDto): Promise<AuthSignupOutput> {
+  async socialAuth(data: SocialSignUpDto): Promise<AuthSignupOutputData> {
     const decoded = await this.verifyIdToken(data);
 
     const email = decoded.email.toLowerCase();
@@ -117,7 +117,7 @@ export class AuthService {
     return transformAuthSignup(user.toObject(), token);
   }
 
-  async signUpUser(data: SignUpInputType): Promise<AuthSignupOutput> {
+  async signUpUser(data: SignUpInputType): Promise<AuthSignupOutputData> {
     try {
       const userName = extractEmailUsername(data.email);
       const password = data.password;

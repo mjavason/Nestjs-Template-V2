@@ -1,5 +1,5 @@
 import { Role } from '@common/models/user/role.schema';
-import { USER_STATUS } from '@common/types/user/user.enum';
+import { UserStatusEnum, UserTypeEnum } from '@common/types/user/user.enum';
 import { UserType } from '@common/types/user/user.type';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
@@ -25,7 +25,7 @@ export class User implements UserType {
   @Prop({ type: Types.ObjectId, ref: Role.name })
   roleId: string;
 
-  @Prop({ default: USER_STATUS.ACTIVE })
+  @Prop({ default: UserStatusEnum.ACTIVE })
   status: string;
 
   @Prop({ unique: true, index: true })
@@ -51,6 +51,9 @@ export class User implements UserType {
 
   @Prop({ default: true })
   isAutoSubscriptionEnabled: boolean;
+
+  @Prop({ default: UserTypeEnum.USER })
+  userType: string;
 }
 
 export type UserDocumentType = HydratedDocument<UserType>;
