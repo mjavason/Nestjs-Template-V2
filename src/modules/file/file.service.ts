@@ -120,7 +120,6 @@ export class FileService {
     if (!imageUploaded) throw new NotFoundException('Upload not found');
 
     await cloudinaryInstance.uploader.destroy(imageUploaded.metaData.public_id);
-
-    return await this.fileModel.deleteOne(imageUploaded.id);
+    await this.fileModel.deleteOne({ _id: imageUploaded.id });
   }
 }

@@ -5,6 +5,7 @@ import {
 } from '@/modules/file/types/file.dto';
 import { Auth, UserContextParam } from '@common/decorators/auth.decorator';
 import { UserDocumentType } from '@common/models/user/user.schema';
+import { UserTypeEnum } from '@common/types/user/user.enum';
 import { upload } from '@configs/multer/multer.config';
 import { MulterFileType } from '@configs/multer/multer.type';
 import {
@@ -86,7 +87,7 @@ export class FileController {
     description:
       'This removes the file from the file database and from cloudinary itself',
   })
-  @Auth()
+  @Auth([UserTypeEnum.ADMIN])
   async deleteUpload(
     @Param('url') url: string,
     @UserContextParam() auth: UserDocumentType,
