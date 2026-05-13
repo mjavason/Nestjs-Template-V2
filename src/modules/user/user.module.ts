@@ -7,6 +7,7 @@ import { Role, RoleSchema } from '@common/models/user/role.schema';
 import { User, UserSchema } from '@common/models/user/user.schema';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserAdminController } from './controllers/user-admin.controller';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     ]),
     FileModule,
   ],
-  controllers: [UserController, RoleController],
+  controllers: [UserController, UserAdminController, RoleController],
   providers: [UserService, RoleService],
   exports: [UserService, RoleService],
 })
