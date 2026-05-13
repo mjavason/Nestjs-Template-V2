@@ -9,6 +9,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import * as bcrypt from 'bcrypt';
 import * as firebaseAdmin from 'firebase-admin';
+import { beforeEach, describe, it } from 'node:test';
 
 jest.mock('bcrypt', () => ({ compare: jest.fn() }));
 jest.mock('jsonwebtoken', () => ({ sign: jest.fn(() => 'mock-token') }));
@@ -40,6 +41,7 @@ const mockUser = {
   userName: 'user',
   password: 'hashed-password',
   pictureUrl: '',
+  status: 'active',
   isEmailVerified: false,
   isPhoneNumberVerified: false,
   toObject: jest.fn().mockReturnValue({}),

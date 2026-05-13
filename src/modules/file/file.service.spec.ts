@@ -1,16 +1,18 @@
 import { File } from '@/common/models/file/file.schema';
 import { FileService } from '@/modules/file/file.service';
 import { cloudinaryInstance } from '@configs/cloudinary/cloudinary.config';
-import { s3 } from '@configs/s3/s3.config';
+import { createMinioPublicBucket, s3 } from '@configs/s3/s3.config';
 import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as fs from 'fs';
+import { beforeEach, describe, it } from 'node:test';
 
 jest.mock('@configs/s3/s3.config', () => ({
   s3: {
     send: jest.fn(),
   },
+  createMinioPublicBucket: jest.fn().mockResolvedValue(undefined),
 }));
 
 jest.mock('@configs/cloudinary/cloudinary.config', () => ({
@@ -61,17 +63,13 @@ describe('FileService', () => {
 
   describe('ensureBucketExists', () => {
     it('should create a bucket if it does not exist', async () => {
-      (s3.send as jest.Mock).mockRejectedValueOnce({
-        $metadata: { httpStatusCode: 404 },
-      });
-      await service.ensureBucketExists('test-bucket');
-      expect(s3.send).toHaveBeenCalledTimes(2);
+      await (service as any).ensureBucketExists('test-bucket');
+      expect(createMinioPublicBucket).toHaveBeenCalledWith('test-bucket');
     });
 
     it('should not create a bucket if it already exists', async () => {
-      (s3.send as jest.Mock).mockResolvedValueOnce({});
-      await service.ensureBucketExists('test-bucket');
-      expect(s3.send).toHaveBeenCalledTimes(1);
+      await (service as any).ensureBucketExists('test-bucket');
+      expect(createMinioPublicBucket).toHaveBeenCalledWith('test-bucket');
     });
   });
 
@@ -79,9 +77,7 @@ describe('FileService', () => {
     it('should upload a file to S3 and save file data', async () => {
       (fs.readFileSync as jest.Mock).mockReturnValue('file content');
       (s3.send as jest.Mock).mockResolvedValue({});
-      const save = jest.fn().mockResolvedValue({ url: 'file-url' });
-      const mockFile = { save };
-      (service as any).fileModel = jest.fn(() => mockFile);
+      mockFileModel.create.mockResolvedValue({ url: 'file-url' });
 
       const result = await service.uploadToS3('test.jpg');
       expect(result).toEqual({ url: 'file-url' });
