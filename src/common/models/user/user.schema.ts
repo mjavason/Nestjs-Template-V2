@@ -1,6 +1,7 @@
 import { Role } from '@common/models/user/role.schema';
 import { UserStatusEnum, UserTypeEnum } from '@common/types/user/user.enum';
 import { UserType } from '@common/types/user/user.type';
+import { generateRandomAvatar } from '@common/utils/dicebar.util';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { HydratedDocument, Types } from 'mongoose';
@@ -75,6 +76,12 @@ UserSchema.pre('save', async function preSave(next) {
   if (this.isModified('password') || (this.isNew && this.password)) {
     const saltOrRounds = 10;
     this.password = await bcrypt.hash(this.password, saltOrRounds);
+  }
+
+  if (this.isNew) {
+    if (!this.pictureUrl && this.email) {
+      this.pictureUrl = generateRandomAvatar(this.email);
+    }
   }
   next();
 });

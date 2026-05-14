@@ -2,6 +2,8 @@ import { createZodDto } from '@anatine/zod-nestjs';
 import { z } from 'zod';
 
 export const signUpSchema = z.object({
+  firstName: z.string({ required_error: 'First name is required' }).trim(),
+  lastName: z.string({ required_error: 'Last name is required' }).trim(),
   email: z
     .string({ required_error: 'Email is required' })
     .email({ message: 'Invalid email format' })

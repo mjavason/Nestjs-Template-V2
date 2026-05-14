@@ -13,7 +13,6 @@ import { Token, TokenDocumentType } from '@common/models/user/token.schema';
 import { User, UserDocumentType } from '@common/models/user/user.schema';
 import { TOKEN_TYPE } from '@common/types/token/token.enum';
 import { UserStatusEnum } from '@common/types/user/user.enum';
-import { generateRandomAvatar } from '@common/utils/dicebar.util';
 import configuration from '@configs/configuration';
 import log from '@configs/logger/logger.config';
 import {
@@ -97,6 +96,8 @@ export class AuthService {
 
     if (!user) {
       user = await this.userModel.create({
+        firstName: decoded.firstName ?? '-',
+        lastName: decoded.lastName ?? '-',
         email,
         userName,
         pictureUrl: decoded.picture,
@@ -150,9 +151,10 @@ export class AuthService {
       }
 
       const user = await this.userModel.create({
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email.toLowerCase(),
         userName: userName.toLowerCase(),
-        pictureUrl: generateRandomAvatar(data.email.toLowerCase()),
         isEmailVerified: false,
         password,
         authMethod: 'default',
