@@ -1,4 +1,11 @@
-import { Document, FilterQuery, Model, UpdateQuery } from 'mongoose';
+import { SCHEMA_KEYS } from '@configs/constants/constants';
+import {
+  Connection,
+  Document,
+  FilterQuery,
+  Model,
+  UpdateQuery,
+} from 'mongoose';
 
 type DefaultOption = unknown | (() => unknown);
 
@@ -14,6 +21,7 @@ type DefaultOption = unknown | (() => unknown);
 export async function applyDefaultsToModel<T extends Document>(
   model: Model<T>,
 ): Promise<number> {
+  let updateCount = 0;
   const schema = model.schema;
 
   // Collect schema paths that declare a default (store the raw default value/function)
@@ -26,7 +34,7 @@ export async function applyDefaultsToModel<T extends Document>(
   if (defaults.length === 0) return 0;
 
   for (const [key, defaultValue] of defaults) {
-    await model.updateMany(
+    const result = await model.updateMany(
       { [key]: { $exists: false } } as FilterQuery<T>,
       {
         $set: {
@@ -35,5 +43,27 @@ export async function applyDefaultsToModel<T extends Document>(
         },
       } as UpdateQuery<T>,
     );
+    updateCount += result.modifiedCount;
   }
+
+  return updateCount;
+}
+
+export async function applyDefaultsToAllModels(
+  connection: Connection,
+): Promise<void> {
+  for (const modelName of Object.values(SCHEMA_KEYS)) {
+    const model = connection.models[modelName];
+
+    if (!model) {
+      console.warn(`[Defaults] Model "${modelName}" is not registered`);
+
+      continue;
+    }
+
+    const updated = await applyDefaultsToModel(model);
+
+    console.log(`[Defaults] ${modelName}: ${updated} documents updated`);
+  }
+  console.log('[Defaults] All models processed');
 }

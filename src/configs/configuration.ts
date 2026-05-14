@@ -1,8 +1,8 @@
-import { APP_STAGE, ConfigurationKey } from '@configs/constants/constants';
+import { AppStageEnum, ConfigurationKey } from '@configs/constants/constants';
 import 'dotenv/config';
 
 export default () => ({
-  [ConfigurationKey.APP_STAGE]: process.env.APP_STAGE ?? APP_STAGE.LOCAL,
+  [ConfigurationKey.APP_STAGE]: process.env.APP_STAGE ?? AppStageEnum.LOCAL,
   [ConfigurationKey.PORT]: process.env.PORT,
 
   [ConfigurationKey.SENTRY_DNS_URL]: process.env.SENTRY_DNS_URL,

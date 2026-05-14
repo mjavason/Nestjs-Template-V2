@@ -43,7 +43,7 @@ export enum ConfigurationKey {
   SMTP_BRIDGE_PASSWORD = 'SMTP_BRIDGE_PASSWORD',
 }
 
-export enum APP_STAGE {
+export enum AppStageEnum {
   LOCAL = 'local',
   STAGING = 'staging',
   PRODUCTION = 'prod',

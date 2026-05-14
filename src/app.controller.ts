@@ -1,6 +1,15 @@
 import { AppService } from '@/app/app.service';
-import { Controller, Get } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Auth } from '@common/decorators/auth.decorator';
+import { UserTypeEnum } from '@common/types/user/user.enum';
+import configuration from '@configs/configuration';
+import { AppStageEnum } from '@configs/constants/constants';
+import { Controller, Get, Post } from '@nestjs/common';
+import {
+  ApiExcludeEndpoint,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller('/')
 @ApiTags('App')
@@ -11,6 +20,15 @@ export class AppController {
   @ApiOperation({ summary: 'Health check endpoint' })
   getHello() {
     return this.appService.getHello();
+  }
+
+  @Post('apply_db_defaults')
+  @Auth([UserTypeEnum.SUPER])
+  @ApiOperation({ summary: 'Apply schema defaults to existing documents' })
+  @ApiExcludeEndpoint(configuration().APP_STAGE !== AppStageEnum.LOCAL)
+  async applyDbDefaults() {
+    await this.appService.applyDBDefaults();
+    return { message: 'Schema defaults applied successfully' };
   }
 
   @Get('config')

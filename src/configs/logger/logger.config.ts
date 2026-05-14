@@ -1,5 +1,5 @@
 import configuration from '@configs/configuration';
-import { APP_NAME, APP_STAGE } from '@configs/constants/constants';
+import { APP_NAME, AppStageEnum } from '@configs/constants/constants';
 import pino from 'pino';
 
 const localTransport = {
@@ -33,7 +33,7 @@ const onlineTransport = {
 };
 
 const transports: pino.TransportTargetOptions[] = [];
-if (configuration().APP_STAGE === APP_STAGE.LOCAL) {
+if (configuration().APP_STAGE === AppStageEnum.LOCAL) {
   // transports.push(localTransport);
 } else {
   transports.push(onlineTransport);

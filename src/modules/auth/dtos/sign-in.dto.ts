@@ -1,4 +1,5 @@
 import { createZodDto } from '@anatine/zod-nestjs';
+import { ApiProperty } from '@nestjs/swagger';
 import { z } from 'zod';
 
 export const loginSchema = z.object({
@@ -10,5 +11,14 @@ export const loginSchema = z.object({
     .min(3, { message: 'Password must not be empty' }),
 });
 
-export type LoginInputType = z.infer<typeof loginSchema>;
-export class LoginDto extends createZodDto(loginSchema) {}
+export class LoginDto extends createZodDto(loginSchema) {
+  @ApiProperty({
+    example: 'testerzero@gmail.com',
+  })
+  email: string;
+
+  @ApiProperty({
+    example: 'Strong@password123',
+  })
+  password: string;
+}

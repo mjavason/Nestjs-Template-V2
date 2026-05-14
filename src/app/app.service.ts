@@ -1,5 +1,8 @@
+import { applyDefaultsToAllModels } from '@/helpers/apply-schema-defaults.helper';
 import configuration from '@configs/configuration';
 import { Injectable } from '@nestjs/common';
+import { InjectConnection } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
 
 export const APP_CONFIG = {
   version: '1.0.0',
@@ -9,10 +12,17 @@ export const APP_CONFIG = {
 
 @Injectable()
 export class AppService {
-  constructor() {}
+  constructor(
+    @InjectConnection()
+    private readonly connection: Connection,
+  ) {}
 
   getHello() {
     return { message: 'API is live!!!' };
+  }
+
+  async applyDBDefaults() {
+    await applyDefaultsToAllModels(this.connection);
   }
 
   async getConfig() {

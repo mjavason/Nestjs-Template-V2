@@ -1,5 +1,5 @@
 import configuration from '@configs/configuration';
-import { APP_STAGE } from '@configs/constants/constants';
+import { AppStageEnum } from '@configs/constants/constants';
 import logger from '@configs/logger/logger.config';
 import {
   ArgumentsHost,
@@ -15,7 +15,8 @@ import { MongooseError } from 'mongoose';
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
-    if (configuration().APP_STAGE === APP_STAGE.LOCAL) console.error(exception);
+    if (configuration().APP_STAGE === AppStageEnum.LOCAL)
+      console.error(exception);
 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();

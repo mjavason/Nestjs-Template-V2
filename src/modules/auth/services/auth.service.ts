@@ -44,7 +44,7 @@ export class AuthService {
   ) {}
 
   isUserActive(user: UserDocumentType) {
-    if (user.status !== UserStatusEnum.ACTIVE) {
+    if (user.status === UserStatusEnum.INACTIVE) {
       throw new ForbiddenException('User account is disabled');
     }
   }
@@ -338,6 +338,7 @@ export class AuthService {
       email: user.email,
     });
 
+    this.isUserActive(user);
     return transformAuthSignup(user, token);
   }
 

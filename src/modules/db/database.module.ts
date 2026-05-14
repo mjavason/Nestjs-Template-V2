@@ -1,7 +1,3 @@
-/**
- * Database module currently using mongoose
- */
-
 import configuration from '@configs/configuration';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';

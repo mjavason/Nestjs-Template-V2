@@ -13,7 +13,11 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { cloudinaryInstance } from '@configs/cloudinary/cloudinary.config';
 import configuration from '@configs/configuration';
-import { APP_NAME, SCHEMA_KEYS } from '@configs/constants/constants';
+import {
+  APP_NAME,
+  AppStageEnum,
+  SCHEMA_KEYS,
+} from '@configs/constants/constants';
 import { createMinioPublicBucket, s3 } from '@configs/s3/s3.config';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -90,7 +94,7 @@ export class FileService {
   }
 
   private async ensureBucketExists(bucket: string) {
-    if (configuration().APP_STAGE === 'production') {
+    if (configuration().APP_STAGE === AppStageEnum.PRODUCTION) {
       await this.s3EnsureBucketExists(bucket);
     } else {
       await createMinioPublicBucket(bucket);

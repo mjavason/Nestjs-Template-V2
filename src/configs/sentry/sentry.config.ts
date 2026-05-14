@@ -1,5 +1,5 @@
 import configuration from '@configs/configuration';
-import { APP_STAGE } from '@configs/constants/constants';
+import { AppStageEnum } from '@configs/constants/constants';
 import { HttpException } from '@nestjs/common';
 import * as Sentry from '@sentry/nestjs';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
@@ -17,7 +17,7 @@ export function initializeSentryTracing() {
     profileLifecycle: 'trace',
     beforeSend(event, hint) {
       const error = hint.originalException;
-      if (configuration().APP_STAGE === APP_STAGE.LOCAL) {
+      if (configuration().APP_STAGE === AppStageEnum.LOCAL) {
         // if local, don't send to sentry
         return null;
       }
