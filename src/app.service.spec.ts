@@ -1,16 +1,19 @@
 import { AppService } from '@/app/app.service';
+import { getConnectionToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-
-const mockSystemSettingsService = {
-  getSettings: jest.fn(),
-};
 
 describe('AppService', () => {
   let service: AppService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AppService],
+      providers: [
+        AppService,
+        {
+          provide: getConnectionToken(),
+          useValue: {},
+        },
+      ],
     }).compile();
 
     service = module.get<AppService>(AppService);
