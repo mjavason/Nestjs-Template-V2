@@ -1,6 +1,7 @@
 import { applyDefaultsToAllModels } from '@/helpers/apply-schema-defaults.helper';
 import configuration from '@configs/configuration';
-import { Injectable } from '@nestjs/common';
+import { AppStageEnum } from '@configs/constants/constants';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 
@@ -22,6 +23,11 @@ export class AppService {
   }
 
   async applyDBDefaults() {
+    if (configuration().APP_STAGE !== AppStageEnum.LOCAL) {
+      throw new ForbiddenException(
+        'Applying DB defaults is only allowed in local environment',
+      );
+    }
     await applyDefaultsToAllModels(this.connection);
   }
 
