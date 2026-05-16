@@ -2,7 +2,6 @@ import { paginate } from '@/helpers/pagination.helper';
 import { UpdateProfileDto } from '@/modules/user/dtos/update-profile.dto';
 import { User, UserDocumentType } from '@common/models/user/user.schema';
 import { UserStatusEnum } from '@common/types/user/user.enum';
-import log from '@configs/logger/logger.config';
 import {
   BadRequestException,
   Injectable,
@@ -122,7 +121,7 @@ export class UserService {
     userId: string,
     dto: UpdateProfileDto | UpdateProfileAdminDto,
   ) {
-    log.info({
+    grafanaLogger.info({
       context: `${UserService.name}#${this.updateProfile.name}`,
       message: 'Updating user profile',
       userId,
@@ -132,7 +131,7 @@ export class UserService {
     try {
       await this.userModel.findByIdAndUpdate(userId, dto);
 
-      log.info({
+      grafanaLogger.info({
         context: `${UserService.name}#${this.updateProfile.name}`,
         message: 'User profile updated successfully',
         userId,
@@ -140,7 +139,7 @@ export class UserService {
 
       return { success: true, message: 'Profile updated' };
     } catch (error: any) {
-      log.error({
+      grafanaLogger.error({
         context: `${UserService.name}#${this.updateProfile.name}`,
         message: 'Error updating user profile',
         userId,

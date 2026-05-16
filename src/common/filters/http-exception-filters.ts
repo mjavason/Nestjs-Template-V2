@@ -1,6 +1,6 @@
 import configuration from '@configs/configuration';
 import { AppStageEnum } from '@configs/constants/constants';
-import logger from '@configs/logger/logger.config';
+import { grafanaLogger } from '@configs/logger/logger.config';
 import {
   ArgumentsHost,
   BadRequestException,
@@ -82,7 +82,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     };
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
-      logger.fatal({
+      grafanaLogger.fatal({
         context: HttpExceptionFilter.name,
         message: 'Internal Server Error',
         errorMetadata: {
@@ -93,7 +93,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         },
       });
     } else {
-      logger.error({
+      grafanaLogger.error({
         context: HttpExceptionFilter.name,
         message: `Error Response [${status}]:`,
         error: errorResponse,

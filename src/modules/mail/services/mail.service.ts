@@ -1,7 +1,6 @@
 import { SendMailDTO } from '@/modules/mail/validation/send-simple-mail.validation';
 import configuration from '@configs/configuration';
 import { APP_NAME } from '@configs/constants/constants';
-import log from '@configs/logger/logger.config';
 import { transporter } from '@configs/mail/mail.config';
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
@@ -42,7 +41,7 @@ export class MailService {
       );
     }
 
-    log.info({
+    grafanaLogger.info({
       context: `${MailService.name}#${this.sendMail.name}`,
       message: 'Sending mail via transporter',
       recipientEmail,
@@ -63,7 +62,7 @@ export class MailService {
     mailHtmlBody: string,
     mailSubject: string,
   ) => {
-    log.info({
+    grafanaLogger.info({
       context: `${MailService.name}#${this.sendMail.name}`,
       message: 'Sending mail via smtp bridge',
       recipientEmail,

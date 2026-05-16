@@ -39,7 +39,7 @@ if (configuration().APP_STAGE === AppStageEnum.LOCAL) {
   transports.push(onlineTransport);
 }
 
-const logger = pino({
+export const grafanaLogger = pino({
   redact: {
     paths: ['*.password', '*.Password', '*.PASSWORD', 'password'],
     censor: '[Redacted]',
@@ -49,5 +49,3 @@ const logger = pino({
     targets: transports,
   },
 });
-
-export default logger;

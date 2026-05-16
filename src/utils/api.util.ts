@@ -1,4 +1,4 @@
-import logger from '@configs/logger/logger.config';
+import { grafanaLogger } from '@configs/logger/logger.config';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export class ApiService {
@@ -35,7 +35,7 @@ export class ApiService {
 
       return response.data;
     } catch (error: any) {
-      logger.error({
+      grafanaLogger.error({
         context: `${ApiService.name}#${this.request.name}`,
         message: 'API request failed',
         method,

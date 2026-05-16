@@ -5,7 +5,6 @@ import { USER_PERMISSIONS } from '@/modules/user/permissions/user.permission';
 import { APP_PERMISSIONS } from '@common/app.permission';
 import { Role, RoleDocumentType } from '@common/models/user/role.schema';
 import { APP_MODULES } from '@configs/constants/constants';
-import log from '@configs/logger/logger.config';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -25,7 +24,7 @@ export class RoleService {
     const data = await this.roleModel.findOne({ name }).lean();
 
     if (!data) {
-      log.info({
+      grafanaLogger.info({
         context: `${RoleService.name}#${this.findByName.name}`,
         message: 'Role not found by name',
         roleName: name,
@@ -38,7 +37,7 @@ export class RoleService {
   async create(roleData: Partial<Role>) {
     const role = await this.roleModel.create(roleData);
 
-    log.info({
+    grafanaLogger.info({
       context: `${RoleService.name}#${this.create.name}`,
       message: 'Role created successfully',
       roleId: role._id,

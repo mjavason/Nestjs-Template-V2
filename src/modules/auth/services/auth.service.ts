@@ -14,7 +14,6 @@ import { User, UserDocumentType } from '@common/models/user/user.schema';
 import { TOKEN_TYPE } from '@common/types/token/token.enum';
 import { UserStatusEnum } from '@common/types/user/user.enum';
 import configuration from '@configs/configuration';
-import log from '@configs/logger/logger.config';
 import {
   BadRequestException,
   ForbiddenException,
@@ -65,7 +64,7 @@ export class AuthService {
     try {
       const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
       const [firstName, lastName] = decodedToken.name.split(' ');
-      log.info({
+      grafanaLogger.info({
         context: `${AuthService.name}#${this.verifyGoogleToken.name}`,
         message: 'Google token verified successfully',
         email: decodedToken.email,
@@ -77,7 +76,7 @@ export class AuthService {
         email: decodedToken.email.toLowerCase(),
       };
     } catch (err) {
-      log.error({
+      grafanaLogger.error({
         context: `${AuthService.name}#${this.verifyGoogleToken.name}`,
         message: '[Google] Failed to decode/verify id token',
         err,
@@ -105,7 +104,7 @@ export class AuthService {
         authMethod: 'social',
       });
     } else {
-      log.info({
+      grafanaLogger.info({
         context: `${AuthService.name}#${this.socialAuth.name}`,
         message: 'User already exists and is logged in via social',
         email,
@@ -117,7 +116,7 @@ export class AuthService {
       email: user.email,
     });
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.socialAuth.name}`,
       message: 'Social signup completed',
       email,
@@ -142,7 +141,7 @@ export class AuthService {
         { _id: 1, email: 1, userName: 1 },
       );
       if (existingUser) {
-        log.error({
+        grafanaLogger.error({
           context: `${AuthService.name}#${this.signUpUser.name}`,
           message: 'User already exists and tried to sign up again',
           data,
@@ -167,7 +166,7 @@ export class AuthService {
         email: user.email,
       });
 
-      log.info({
+      grafanaLogger.info({
         context: `${AuthService.name}#${this.signUpUser.name}`,
         message: 'New User Signup',
         data,
@@ -175,7 +174,7 @@ export class AuthService {
 
       return transformAuthSignup(user, token);
     } catch (err) {
-      log.error({
+      grafanaLogger.error({
         context: `${AuthService.name}#${this.signUpUser.name}`,
         message: 'Failed to sign up user',
         err,
@@ -206,7 +205,7 @@ export class AuthService {
     await user.save();
     await token.deleteOne();
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.confirmEmail.name}`,
       message: 'Email verified successfully',
       email: user.email,
@@ -236,7 +235,7 @@ export class AuthService {
     await user.save();
     await token.deleteOne();
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.confirmPhoneNumber.name}`,
       message: 'Phone number verified successfully',
       phoneNumber: dto.phoneNumber,
@@ -284,7 +283,7 @@ export class AuthService {
         mailSubject: 'Your Two-Factor Authentication Code',
       });
 
-      log.info({
+      grafanaLogger.info({
         context: `${AuthService.name}#${this.login.name}`,
         message: '2FA code sent via email',
         userId: user.id,
@@ -300,7 +299,7 @@ export class AuthService {
       email: user.email,
     });
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.login.name}`,
       message: 'Login successful',
       userId: user.id,
@@ -333,7 +332,7 @@ export class AuthService {
 
     const token = this.generateAuthToken({ id: user.id, email: user.email });
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.verifyTwoFactor.name}`,
       message: '2FA verified, login successful',
       userId: user.id,
@@ -345,7 +344,7 @@ export class AuthService {
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.forgotPassword.name}`,
       message: 'Password reset requested',
       email: dto.email.toLowerCase(),
@@ -371,7 +370,7 @@ export class AuthService {
       mailSubject: 'Password reset code',
     });
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.forgotPassword.name}`,
       message: 'Password reset code sent via email',
       email: user.email,
@@ -403,7 +402,7 @@ export class AuthService {
       type: TOKEN_TYPE.PASSWORD_RESET,
     });
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.resetPassword.name}`,
       message: 'Password reset successfully',
       userId: user.id,
@@ -427,7 +426,7 @@ export class AuthService {
   }
 
   async sendEmailVerification(user: UserDocumentType) {
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.sendEmailVerification.name}`,
       message: 'User created',
       userId: user.id,
@@ -449,7 +448,7 @@ export class AuthService {
       mailSubject: 'Verify your email',
     });
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.sendEmailVerification.name}`,
       message: 'Email confirmation code sent',
       email: user.email,
@@ -459,7 +458,7 @@ export class AuthService {
   async sendPhoneVerification(user: UserDocumentType) {
     // TODO: Use sms when available
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.sendPhoneVerification.name}`,
       message: 'User created',
       userId: user.id,
@@ -481,7 +480,7 @@ export class AuthService {
       mailSubject: 'Verify your phone number',
     });
 
-    log.info({
+    grafanaLogger.info({
       context: `${AuthService.name}#${this.sendPhoneVerification.name}`,
       message: 'Phone confirmation code sent',
       email: user.email,
