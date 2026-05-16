@@ -14,7 +14,7 @@ import { MongooseError } from 'mongoose';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     if (configuration().APP_STAGE === AppStageEnum.LOCAL)
       console.error(exception);
 
@@ -76,18 +76,33 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message,
       ...(errors && { errors }),
     };
+    const request = host.switchToHttp().getRequest() as {
+      url: string;
+      method: string;
+    };
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
       logger.fatal({
         context: HttpExceptionFilter.name,
         message: 'Internal Server Error',
-        error: exception,
+        errorMetadata: {
+          apiRoute: request.url,
+          method: request.method,
+          message: exception.message,
+          stack: exception.stack,
+        },
       });
     } else {
       logger.error({
         context: HttpExceptionFilter.name,
         message: `Error Response [${status}]:`,
         error: errorResponse,
+        errorMetadata: {
+          apiRoute: request.url,
+          method: request.method,
+          message: exception.message,
+          stack: exception.stack,
+        },
       });
     }
 
