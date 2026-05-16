@@ -1,7 +1,6 @@
 import { MailService } from '@/modules/mail/services/mail.service';
 import { transporter } from '@configs/mail/mail.config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, it } from 'node:test';
 
 jest.mock('@configs/mail/mail.config', () => ({
   transporter: {
