@@ -3,6 +3,16 @@ import { Role } from '@common/models/user/role.schema';
 import { APP_MODULES } from '@configs/constants/constants';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, it } from 'node:test';
+
+jest.mock('@configs/logger/logger.config', () => ({
+  grafanaLogger: {
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+  },
+}));
 
 const mockRoleModel = {
   find: jest.fn(),

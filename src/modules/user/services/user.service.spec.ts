@@ -3,6 +3,16 @@ import { User } from '@common/models/user/user.schema';
 import { BadRequestException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, it } from 'node:test';
+
+jest.mock('@configs/logger/logger.config', () => ({
+  grafanaLogger: {
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+  },
+}));
 
 const mockUserModel = {
   findByIdAndUpdate: jest.fn(),

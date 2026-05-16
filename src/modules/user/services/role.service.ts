@@ -5,6 +5,7 @@ import { USER_PERMISSIONS } from '@/modules/user/permissions/user.permission';
 import { APP_PERMISSIONS } from '@common/app.permission';
 import { Role, RoleDocumentType } from '@common/models/user/role.schema';
 import { APP_MODULES } from '@configs/constants/constants';
+import { grafanaLogger } from '@configs/logger/logger.config';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';

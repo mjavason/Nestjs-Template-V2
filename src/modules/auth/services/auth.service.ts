@@ -14,6 +14,7 @@ import { User, UserDocumentType } from '@common/models/user/user.schema';
 import { TOKEN_TYPE } from '@common/types/token/token.enum';
 import { UserStatusEnum } from '@common/types/user/user.enum';
 import configuration from '@configs/configuration';
+import { grafanaLogger } from '@configs/logger/logger.config';
 import {
   BadRequestException,
   ForbiddenException,

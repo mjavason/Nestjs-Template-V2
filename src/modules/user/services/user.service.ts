@@ -2,6 +2,7 @@ import { paginate } from '@/helpers/pagination.helper';
 import { UpdateProfileDto } from '@/modules/user/dtos/update-profile.dto';
 import { User, UserDocumentType } from '@common/models/user/user.schema';
 import { UserStatusEnum } from '@common/types/user/user.enum';
+import { grafanaLogger } from '@configs/logger/logger.config';
 import {
   BadRequestException,
   Injectable,

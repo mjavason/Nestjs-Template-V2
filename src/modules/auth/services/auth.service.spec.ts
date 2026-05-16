@@ -9,11 +9,20 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import * as bcrypt from 'bcrypt';
 import * as firebaseAdmin from 'firebase-admin';
+import { beforeEach, describe, it } from 'node:test';
 
 jest.mock('bcrypt', () => ({ compare: jest.fn() }));
 jest.mock('jsonwebtoken', () => ({ sign: jest.fn(() => 'mock-token') }));
 jest.mock('firebase-admin', () => ({
   auth: jest.fn().mockReturnValue({ verifyIdToken: jest.fn() }),
+}));
+jest.mock('@configs/logger/logger.config', () => ({
+  grafanaLogger: {
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+  },
 }));
 
 const mockUserModel = {
