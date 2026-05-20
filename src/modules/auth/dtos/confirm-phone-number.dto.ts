@@ -3,11 +3,11 @@ import { z } from 'zod';
 
 export const confirmPhoneNumberSchema = z.object({
   phoneNumber: z
-    .string({ required_error: 'Phone number is required' })
+    .string({ message: 'Phone number is required' })
     .min(11, { message: 'Phone number must be at least 11 characters' })
     .max(15, { message: 'Phone number must be at most 15 characters' }),
   token: z
-    .string({ required_error: 'Token is required' })
+    .string({ message: 'Token is required' })
     .length(5, { message: 'Token must be exactly 5 digits' })
     .regex(/^\d{5}$/, { message: 'Token must be a 5-digit number' }),
 });

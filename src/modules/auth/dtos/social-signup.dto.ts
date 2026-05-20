@@ -2,9 +2,9 @@ import { createZodDto } from '@anatine/zod-nestjs';
 import { z } from 'zod';
 
 export const socialSignUpSchema = z.object({
-  token: z.string({ required_error: 'Id token is required' }),
+  token: z.string({ message: 'Id token is required' }),
   provider: z.enum(['google.com'], {
-    required_error: 'Social provider is required',
+    message: 'Social provider is required',
   }),
 });
 

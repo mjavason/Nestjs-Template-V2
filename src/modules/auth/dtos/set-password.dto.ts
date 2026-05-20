@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const setPasswordSchema = z.object({
   password: z
-    .string({ required_error: 'Password is required' })
+    .string({ message: 'Password is required' })
     .min(8, 'Password must be at least 8 characters')
     .regex(
       /(?=.*\d)(?=.*\W)/,

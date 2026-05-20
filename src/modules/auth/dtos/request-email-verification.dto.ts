@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const requestEmailVerificationSchema = z.object({
   email: z
-    .string({ required_error: 'Email is required' })
+    .string({ message: 'Email is required' })
     .email({ message: 'Invalid email format' }),
 });
 

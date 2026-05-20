@@ -4,8 +4,7 @@ import { z } from 'zod';
 export const urlParamSchema = z.object({
   url: z
     .string({
-      required_error: 'url is required',
-      invalid_type_error: 'url must be a string',
+      message: 'url is required',
     })
     .url('url must be a valid URL'),
 });
