@@ -52,7 +52,7 @@ export class AppModule {
           '/auth/request_phone_number_verification',
           '/auth/username/(.*)',
         ]),
-        ...excludeGet(['/config']),
+        ...excludeGet(['/config', '/system_settings']),
       )
       .forRoutes('*');
   }

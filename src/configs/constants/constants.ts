@@ -62,6 +62,7 @@ export const SCHEMA_KEYS = {
   ROLE: 'Role',
   TOKEN: 'Token',
   USER: 'User',
+  SYSTEM_SETTINGS: 'SystemSettings',
 };
 
 export enum TimeDurationInSeconds {
