@@ -80,5 +80,3 @@ export enum TimeDurationInSeconds {
 }
 
 export const APP_NAME = 'Startup';
-export const FreeVideosPerDay = 1000;
-export const VideoHeartBeatDurationInSeconds = 30;
