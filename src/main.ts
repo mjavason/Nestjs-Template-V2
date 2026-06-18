@@ -1,5 +1,7 @@
+import { AppModule } from '@/app/app.module';
 import { ZodValidationPipe } from '@anatine/zod-nestjs';
 import { TransformInterceptor } from '@common/interceptors/transform.interceptor';
+import { TrimPipe } from '@common/pipes/trim.pipe';
 import '@common/utils/ping.util';
 import configuration from '@configs/configuration';
 import { initializeFirebase } from '@configs/firebase/firebase-initializer';
@@ -9,8 +11,6 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { json } from 'express';
 import helmet from 'helmet';
-
-import { AppModule } from '@/app/app.module';
 
 async function bootstrap() {
   // console.log('Env test', process.env);
@@ -25,7 +25,11 @@ async function bootstrap() {
       callback(null, true);
     },
   });
-  app.useGlobalPipes(new ZodValidationPipe(), new ValidationPipe());
+  app.useGlobalPipes(
+    new TrimPipe(),
+    new ZodValidationPipe(),
+    new ValidationPipe(),
+  );
   app.useGlobalInterceptors(new TransformInterceptor());
   app.setGlobalPrefix('api/v1', {
     exclude: ['/'],
